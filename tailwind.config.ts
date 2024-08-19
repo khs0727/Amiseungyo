@@ -1,20 +1,41 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: [
+    { pattern: /text-tagColor-\d+/ },
+    { pattern: /bg-tagBgColor-\d+/ },
+  ],
+  prefix: '',
   theme: {
+    container: {
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px',
+      },
+    },
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      fontFamily: {
+        sans: ['Do Hyeon', 'sans-serif'],
+        serif: ['Acme', 'serif'],
+      },
+
+      colors: {
+        blue: { DEFAULT: '#1d4ed8', dark: '#1e3a8a' },
+        navy: '#172554',
+        pink: { DEFAULT: '#be185d', dark: '#831843' },
+        red: '#b91c1c',
+        orange: '#f97316',
+        gray: { light: '#d1d5db', DEFAULT: '#9ca3af', dark: '#273444' },
+        black: '#09090b',
       },
     },
   },
   plugins: [],
-};
-export default config;
+} satisfies Config
+export default config
