@@ -151,7 +151,7 @@ export default function SingupForm() {
                         asChild
                         variant="icon"
                         size="auto"
-                        onClick={() => setShowPassword(!showPassword)}
+                        onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
                         type="button"
                       >
                         <span className="absolute top-1.5 right-4">
