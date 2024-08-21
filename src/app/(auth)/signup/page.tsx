@@ -15,7 +15,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const FormSchema = z
   .object({
@@ -43,6 +45,10 @@ const FormSchema = z
 type FormValues = z.infer<typeof FormSchema>;
 
 export default function SingupForm() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+  const router = useRouter();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onChange',
@@ -52,8 +58,6 @@ export default function SingupForm() {
       passwordConfirmation: '',
     },
   });
-
-  const router = useRouter();
 
   const onSubmit = (values: FormValues) => {
     toast.success('회원가입에 성공하였습니다.');
@@ -93,13 +97,34 @@ export default function SingupForm() {
                 <FormItem>
                   <FormLabel>비밀번호</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="비밀번호를 입력해주세요."
-                      className="text-lg"
-                      autoComplete="new-password"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="비밀번호를 입력해주세요."
+                        className="text-lg"
+                        autoComplete="new-password"
+                        {...field}
+                      />
+                      <Button
+                        asChild
+                        variant="icon"
+                        size="auto"
+                        onClick={() => setShowPassword(!showPassword)}
+                        type="button"
+                      >
+                        <span className="absolute top-1.5 right-4">
+                          {showPassword ? (
+                            <AiFillEye color={'#9FA6B2'} size={22} className="hover:fill-[#ddd]" />
+                          ) : (
+                            <AiFillEyeInvisible
+                              color={'#9FA6B2'}
+                              size={22}
+                              className="hover:fill-[#ddd]"
+                            />
+                          )}
+                        </span>
+                      </Button>
+                    </div>
                   </FormControl>
 
                   <FormMessage />
@@ -114,13 +139,34 @@ export default function SingupForm() {
                 <FormItem>
                   <FormLabel>비밀번호 확인</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="비밀번호를 다시 입력해주세요."
-                      className="text-lg"
-                      autoComplete="new-password"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="비밀번호를 다시 입력해주세요."
+                        className="text-lg"
+                        autoComplete="new-password"
+                        {...field}
+                      />
+                      <Button
+                        asChild
+                        variant="icon"
+                        size="auto"
+                        onClick={() => setShowPassword(!showPassword)}
+                        type="button"
+                      >
+                        <span className="absolute top-1.5 right-4">
+                          {showPassword ? (
+                            <AiFillEye color={'#9FA6B2'} size={22} className="hover:fill-[#ddd]" />
+                          ) : (
+                            <AiFillEyeInvisible
+                              color={'#9FA6B2'}
+                              size={22}
+                              className="hover:fill-[#ddd]"
+                            />
+                          )}
+                        </span>
+                      </Button>
+                    </div>
                   </FormControl>
 
                   <FormMessage />
