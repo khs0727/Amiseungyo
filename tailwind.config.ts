@@ -1,41 +1,40 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss"
 
-const config: Config = {
+const config = {
+  darkMode: ["class"],
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
-  safelist: [
-    { pattern: /text-tagColor-\d+/ },
-    { pattern: /bg-tagBgColor-\d+/ },
-  ],
-  prefix: '',
+  prefix: "",
   theme: {
     container: {
       center: true,
-      padding: '2rem',
+      padding: "2rem",
       screens: {
-        '2xl': '1400px',
+        "2xl": "1400px",
       },
     },
     extend: {
-      fontFamily: {
-        sans: ['Do Hyeon', 'sans-serif'],
-        serif: ['Acme', 'serif'],
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
       },
-
-      colors: {
-        blue: { DEFAULT: '#1d4ed8', dark: '#1e3a8a' },
-        navy: '#172554',
-        pink: { DEFAULT: '#be185d', dark: '#831843' },
-        red: '#b91c1c',
-        orange: '#f97316',
-        gray: { light: '#d1d5db', DEFAULT: '#9ca3af', dark: '#273444' },
-        black: '#09090b',
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 } satisfies Config
+
 export default config
