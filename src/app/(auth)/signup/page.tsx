@@ -14,6 +14,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const FormSchema = z
   .object({
@@ -51,8 +53,11 @@ export default function SingupForm() {
     },
   });
 
+  const router = useRouter();
+
   const onSubmit = (values: FormValues) => {
-    console.log(values);
+    toast.success('회원가입에 성공하였습니다.');
+    router.push('/');
   };
 
   return (
@@ -71,6 +76,7 @@ export default function SingupForm() {
                     <Input
                       placeholder="사용할 이름을 입력해주세요."
                       className="text-lg"
+                      autoComplete="username"
                       {...field}
                     />
                   </FormControl>
@@ -91,6 +97,7 @@ export default function SingupForm() {
                       type="password"
                       placeholder="비밀번호를 입력해주세요."
                       className="text-lg"
+                      autoComplete="new-password"
                       {...field}
                     />
                   </FormControl>
@@ -111,6 +118,7 @@ export default function SingupForm() {
                       type="password"
                       placeholder="비밀번호를 다시 입력해주세요."
                       className="text-lg"
+                      autoComplete="new-password"
                       {...field}
                     />
                   </FormControl>
