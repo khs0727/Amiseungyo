@@ -30,7 +30,7 @@ const config: Config = {
         navy: '#172554',
         pink: { DEFAULT: '#be185d', dark: '#831843' },
         red: '#b91c1c',
-        orange: '#f97316',
+        orange: { light: '#fff7ed', DEFAULT: '#ea580c', dark: '#c2410c' },
         gray: { light: '#d1d5db', DEFAULT: '#9ca3af', dark: '#273444' },
         black: '#09090b',
       },

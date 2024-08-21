@@ -31,7 +31,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={(inter.className, 'bg-orange-light px-8 pt-[50px]')}>
+        {children}
+      </body>
     </html>
   )
 }

@@ -8,7 +8,11 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Do Hyeon', sans-serif;
+}
+
+.english-text {
+  font-family: 'Acme', sans-serif;
 }
 
 a {
