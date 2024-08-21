@@ -19,14 +19,12 @@ import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import app from '@/lib/firebase.js';
+
 const FormSchema = z
   .object({
-    username: z
-      .string()
-      .min(2, {
-        message: '유저 이름은 최소 2글자 이상이여야 합니다',
-      })
-      .max(10, { message: '유저 이름은 최대 10자 이하이어야 합니다.' }),
+    email: z.string().email({ message: '유효한 이메일 주소를 입력해주세요.' }),
     password: z
       .string()
       .min(8, {
@@ -48,20 +46,26 @@ export default function SingupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
   const router = useRouter();
+  const auth = getAuth(app);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onChange',
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
       passwordConfirmation: '',
     },
   });
 
-  const onSubmit = (values: FormValues) => {
-    toast.success('회원가입에 성공하였습니다.');
-    router.push('/');
+  const onSubmit = async (values: FormValues) => {
+    try {
+      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      toast.success('회원가입에 성공하였습니다.');
+      router.push('/');
+    } catch {
+      toast.error('회원가입에 실패하였습니다.');
+    }
   };
 
   return (
@@ -72,15 +76,15 @@ export default function SingupForm() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
             <FormField
               control={form.control}
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>이름</FormLabel>
+                  <FormLabel>이메일</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="사용할 이름을 입력해주세요."
+                      placeholder="이메일을 입력해주세요."
                       className="text-lg"
-                      autoComplete="username"
+                      autoComplete="email"
                       {...field}
                     />
                   </FormControl>
@@ -141,7 +145,7 @@ export default function SingupForm() {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        type={showPassword ? 'text' : 'password'}
+                        type={showPasswordConfirmation ? 'text' : 'password'}
                         placeholder="비밀번호를 다시 입력해주세요."
                         className="text-lg"
                         autoComplete="new-password"
