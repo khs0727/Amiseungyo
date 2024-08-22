@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Button } from '@/components/ui/button';
+import DropdownList from './_components/dropdownlist';
 import {
   Form,
   FormControl,
@@ -19,8 +20,9 @@ import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
-import app from '@/lib/firebase.js';
+import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
+import { ref, set } from 'firebase/database';
+import app, { db } from '@/lib/firebase.js';
 
 const FormSchema = z
   .object({
@@ -34,6 +36,7 @@ const FormSchema = z
         message: '비밀번호는 영어, 숫자, 특수문자를 모두 포함해야 합니다.',
       }),
     passwordConfirmation: z.string(),
+    team: z.string().min(1, { message: '팀을 선택해주세요.' }),
   })
   .refine((data) => data.password === data.passwordConfirmation, {
     message: '비밀번호가 일치하지 않습니다.',
@@ -55,6 +58,7 @@ export default function SingupForm() {
       email: '',
       password: '',
       passwordConfirmation: '',
+      team: '팀을 선택해주세요.',
     },
   });
 
@@ -175,6 +179,17 @@ export default function SingupForm() {
 
                   <FormMessage />
                 </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="team"
+              render={({ field }) => (
+                <DropdownList
+                  value={field.value}
+                  onChange={(value) => field.onChange({ target: { value } })}
+                />
               )}
             />
 

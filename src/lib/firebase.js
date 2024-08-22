@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
+import { getDatabase } from 'firebase/database';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -9,6 +9,7 @@ import { getAnalytics } from 'firebase/analytics';
 const firebaseConfig = {
   apiKey: 'AIzaSyAfm88mVtvRagE5ttJB020fhw5x3QsVGwI',
   authDomain: 'amiseungyo.firebaseapp.com',
+  databaseURL: 'https://amiseungyo-default-rtdb.asia-southeast1.firebasedatabase.app/',
   projectId: 'amiseungyo',
   storageBucket: 'amiseungyo.appspot.com',
   messagingSenderId: '893580590859',
@@ -18,5 +19,5 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const db = getDatabase(app);
 export default app;
-const analytics = getAnalytics(app);
