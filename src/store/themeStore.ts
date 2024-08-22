@@ -1,11 +1,12 @@
 import { create } from 'zustand';
+import { TeamNames } from '@/constants/teams';
 
 interface ThemeStore {
-  team: string;
+  team: string | undefined;
   setTeam: (team: string) => void;
 }
 
 export const useThemeStore = create<ThemeStore>((set) => ({
-  team: '기본테마',
+  team: undefined,
   setTeam: (team) => set({ team }),
 }));

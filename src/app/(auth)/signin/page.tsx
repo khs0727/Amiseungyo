@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Button } from '@/components/ui/button';
-import DropdownList from './_components/dropdownlist';
 import {
   Form,
   FormControl,
@@ -19,36 +18,26 @@ import { toast } from 'sonner';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useThemeStore } from '@/store/themeStore';
 
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import app from '@/lib/firebase.js';
 
-const FormSchema = z
-  .object({
-    email: z.string().email({ message: '유효한 이메일 주소를 입력해주세요.' }),
-    password: z
-      .string()
-      .min(8, {
-        message: '비밀번호는 최소 8자 이상이어야 합니다.',
-      })
-      .regex(/(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}/, {
-        message: '비밀번호는 영어, 숫자, 특수문자를 모두 포함해야 합니다.',
-      }),
-    passwordConfirmation: z.string(),
-    team: z.string().min(1, { message: '팀을 선택해주세요.' }),
-  })
-  .refine((data) => data.password === data.passwordConfirmation, {
-    message: '비밀번호가 일치하지 않습니다.',
-    path: ['passwordConfirmation'],
-  });
+const FormSchema = z.object({
+  email: z.string().email({ message: '유효한 이메일 주소를 입력해주세요.' }),
+  password: z
+    .string()
+    .min(8, {
+      message: '비밀번호는 최소 8자 이상이어야 합니다.',
+    })
+    .regex(/(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}/, {
+      message: '비밀번호는 영어, 숫자, 특수문자를 모두 포함해야 합니다.',
+    }),
+});
 
 type FormValues = z.infer<typeof FormSchema>;
 
-export default function SingupForm() {
+export default function SigninForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
-  const { setTeam } = useThemeStore();
 
   const router = useRouter();
   const auth = getAuth(app);
@@ -59,20 +48,16 @@ export default function SingupForm() {
     defaultValues: {
       email: '',
       password: '',
-      passwordConfirmation: '',
-      team: '팀을 선택해주세요.',
     },
   });
 
   const onSubmit = async (values: FormValues) => {
     try {
-      await createUserWithEmailAndPassword(auth, values.email, values.password);
-      setTeam(values.team);
-
-      toast.success('회원가입에 성공하였습니다.');
-      router.push('/signin');
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      toast.success('로그인에 성공하였습니다.');
+      router.push('/');
     } catch {
-      toast.error('회원가입에 실패하였습니다.');
+      toast.error('로그인 중 오류가 발생했습니다. 나중에 다시 시도해주세요.');
     }
   };
 
@@ -144,63 +129,13 @@ export default function SingupForm() {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="passwordConfirmation"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>비밀번호 확인</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input
-                        type={showPasswordConfirmation ? 'text' : 'password'}
-                        placeholder="비밀번호를 다시 입력해주세요."
-                        className="text-lg"
-                        autoComplete="new-password"
-                        {...field}
-                      />
-                      <Button
-                        asChild
-                        variant="icon"
-                        size="auto"
-                        onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
-                        type="button"
-                      >
-                        <span className="absolute top-1.5 right-4">
-                          {showPassword ? (
-                            <AiFillEye color={'#9FA6B2'} size={22} className="hover:fill-[#ddd]" />
-                          ) : (
-                            <AiFillEyeInvisible
-                              color={'#9FA6B2'}
-                              size={22}
-                              className="hover:fill-[#ddd]"
-                            />
-                          )}
-                        </span>
-                      </Button>
-                    </div>
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="team"
-              render={({ field }) => (
-                <DropdownList value={field.value} onChange={(value) => field.onChange(value)} />
-              )}
-            />
-
             <Button
               size="lg"
               type="submit"
               className="w-full text-lg"
               disabled={form.formState.isSubmitting}
             >
-              가입하기
+              로그인하기
             </Button>
           </form>
         </Form>

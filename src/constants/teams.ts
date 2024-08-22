@@ -24,14 +24,14 @@ export type TeamNames =
   | '키움 히어로즈';
 
 export const TEAMCOLORS: Record<TeamNames, string> = {
-  '기아 타이거즈': 'team-기아 타이거즈-background',
-  '삼성 라이온즈': 'team-삼성 라이온즈-background',
-  'LG 트윈스': 'team-LG 트윈스-background',
-  '두산 베어스': 'team-두산 베어스-background',
-  'SSG 랜더스': 'team-SSG 랜더스-background',
-  'KT 위즈': 'team-KT 위즈-background',
-  '한화 이글스': 'team-한화 이글스-background',
-  '롯데 자이언츠': 'team-롯데 자이언츠-background',
-  'NC 다이노스': 'team-NC 다이노스-background',
-  '키움 히어로즈': 'team-키움 히어로즈-background',
+  '기아 타이거즈': '#b91c1c',
+  '삼성 라이온즈': '#3b82f6',
+  'LG 트윈스': '#9d174d',
+  '두산 베어스': '#312e81',
+  'SSG 랜더스': '#dc2626',
+  'KT 위즈': '#0a0a0a',
+  '한화 이글스': '#ea580c',
+  '롯데 자이언츠': '#1e3a8a',
+  'NC 다이노스': '#0369a1',
+  '키움 히어로즈': '#be185d',
 };
