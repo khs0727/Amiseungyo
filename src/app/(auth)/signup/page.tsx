@@ -19,10 +19,10 @@ import { toast } from 'sonner';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useThemeStore } from '@/store/themeStore';
 
-import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
-import { ref, set } from 'firebase/database';
-import app, { db } from '@/lib/firebase.js';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import app from '@/lib/firebase.js';
 
 const FormSchema = z
   .object({
@@ -48,6 +48,7 @@ type FormValues = z.infer<typeof FormSchema>;
 export default function SingupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+
   const router = useRouter();
   const auth = getAuth(app);
 
@@ -65,6 +66,7 @@ export default function SingupForm() {
   const onSubmit = async (values: FormValues) => {
     try {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
+
       toast.success('회원가입에 성공하였습니다.');
       router.push('/');
     } catch {
