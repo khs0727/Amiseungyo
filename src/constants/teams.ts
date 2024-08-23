@@ -11,19 +11,7 @@ export const TEAMS = [
   '키움 히어로즈',
 ];
 
-export type TeamNames =
-  | '기아 타이거즈'
-  | '삼성 라이온즈'
-  | 'LG 트윈스'
-  | '두산 베어스'
-  | 'SSG 랜더스'
-  | 'KT 위즈'
-  | '한화 이글스'
-  | '롯데 자이언츠'
-  | 'NC 다이노스'
-  | '키움 히어로즈';
-
-export const TEAMCOLORS: Record<TeamNames, string> = {
+export const TEAMCOLORS: Record<string, string> = {
   '기아 타이거즈': '#b91c1c',
   '삼성 라이온즈': '#3b82f6',
   'LG 트윈스': '#9d174d',
@@ -34,4 +22,5 @@ export const TEAMCOLORS: Record<TeamNames, string> = {
   '롯데 자이언츠': '#1e3a8a',
   'NC 다이노스': '#0369a1',
   '키움 히어로즈': '#be185d',
+  default: '#020617',
 };
