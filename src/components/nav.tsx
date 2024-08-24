@@ -16,12 +16,12 @@ export default function Nav() {
         <h1 className="text-3xl text-white">AmISeungyo</h1>
       </Link>
       <div className="flex gap-3 items-center">
-        <Link href="/myGames">
+        <Link href="/my-games">
           <Button variant="link" className="text-lg text-white">
             My Games
           </Button>
         </Link>
-        <Link href="/addGame">
+        <Link href="/add-game">
           <Button variant="link" className="text-lg text-white">
             add Game
           </Button>
