@@ -22,6 +22,7 @@ import { useAuthStore } from '@/store/auth-store';
 
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import app from '@/lib/firebase.js';
+import Link from 'next/link';
 
 const FormSchema = z.object({
   email: z.string().email({ message: '유효한 이메일 주소를 입력해주세요.' }),
@@ -71,7 +72,9 @@ export default function SigninForm() {
   return (
     <div className="flex items-center justify-center w-screen h-screen px-5">
       <div className="flex flex-col items-center w-full max-w-[500px]">
-        <h1 className="text-4xl mb-8">AmISeungyo</h1>
+        <Link href="/">
+          <h1 className="text-4xl mb-8">AmISeungyo</h1>
+        </Link>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
             <FormField

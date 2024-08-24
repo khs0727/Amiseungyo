@@ -12,13 +12,10 @@ export default function Nav() {
 
   return (
     <nav className={`bg-slate-950 max-w-full w-screen p-8 ${navClass} flex justify-between`}>
-      <h1 className="text-3xl text-white">AmISeungyo</h1>
+      <Link href="/">
+        <h1 className="text-3xl text-white">AmISeungyo</h1>
+      </Link>
       <div className="flex gap-3 items-center">
-        <Link href="/home" passHref>
-          <Button variant="link" className="text-lg text-white">
-            Home
-          </Button>
-        </Link>
         <Link href="/myGames">
           <Button variant="link" className="text-lg text-white">
             My Games

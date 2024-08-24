@@ -79,7 +79,9 @@ export default function SingupForm() {
   return (
     <div className="flex items-center justify-center w-screen h-screen px-5">
       <div className="flex flex-col items-center w-full max-w-[500px]">
-        <h1 className="text-4xl mb-8">AmISeungyo</h1>
+        <Link href="/">
+          <h1 className="text-4xl mb-8">AmISeungyo</h1>
+        </Link>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
             <FormField
