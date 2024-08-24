@@ -3,6 +3,7 @@
 import { useThemeStore } from '@/store/themeStore';
 import { TEAMCOLORS, TeamNames } from '@/constants/teams';
 import Link from 'next/link';
+import { Button } from './ui/button';
 
 export default function Nav() {
   const team = useThemeStore((state) => state.team as TeamNames);
@@ -12,11 +13,27 @@ export default function Nav() {
   return (
     <nav className={`p-8 ${navClass} flex justify-between`}>
       <h1 className="text-3xl text-#f8fafc">AmISeungyo</h1>
-      <div className="flex gap-5 items-center text-lg text-#f8fafc">
-        <Link href="/home">Home</Link>
-        <Link href="/about">About</Link>
-        <Link href="/services">Services</Link>
-        <Link href="/contact">Contact</Link>
+      <div className="flex gap-3 items-center">
+        <Link href="/home" passHref>
+          <Button variant="link" className="text-lg">
+            Home
+          </Button>
+        </Link>
+        <Link href="/myGames">
+          <Button variant="link" className="text-lg">
+            My Games
+          </Button>
+        </Link>
+        <Link href="/addGame">
+          <Button variant="link" className="text-lg">
+            add Game
+          </Button>
+        </Link>
+        <Link href="/profile">
+          <Button variant="link" className="text-lg">
+            Profile
+          </Button>
+        </Link>
       </div>
     </nav>
   );
