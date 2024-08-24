@@ -17,9 +17,9 @@ export default function Nav() {
       <h1 className="text-3xl text-white">AmISeungyo</h1>
       <div className="flex gap-5 items-center text-lg text-white">
         <Link href="/home">Home</Link>
-        <Link href="/about">Records</Link>
-        <Link href="/services">Add Record</Link>
-        <Link href="/contact">Profile</Link>
+        <Link href="/myGames">My Games</Link>
+        <Link href="/addGame">Add Game</Link>
+        <Link href="/profile">Profile</Link>
       </div>
     </nav>
   );
