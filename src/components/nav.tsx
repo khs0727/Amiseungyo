@@ -1,6 +1,6 @@
 'use client';
 
-import { TeamNames, useThemeStore } from '@/store/themeStore';
+import { TeamNames, useThemeStore } from '@/store/theme-store';
 import { TEAMCOLORS } from '@/constants/teams';
 import Link from 'next/link';
 import { Button } from './ui/button';

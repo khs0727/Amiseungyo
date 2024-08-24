@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useAuthStore } from '@/store/auth-store';
 
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import app from '@/lib/firebase.js';
@@ -38,6 +39,7 @@ type FormValues = z.infer<typeof FormSchema>;
 
 export default function SigninForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const login = useAuthStore((state) => state.login);
 
   const router = useRouter();
   const auth = getAuth(app);
@@ -53,7 +55,12 @@ export default function SigninForm() {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
+      const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+      const user = userCredential.user;
+
+      login({ id: user.uid, email: user.email! });
+      console.log('Zustand State:', useAuthStore.getState());
+
       toast.success('로그인에 성공하였습니다.');
       router.push('/');
     } catch {
