@@ -19,7 +19,7 @@ import { toast } from 'sonner';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useThemeStore } from '@/store/themeStore';
+import { useThemeStore } from '@/store/theme-store';
 
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import app from '@/lib/firebase.js';
