@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export type TeamNames =
   | '기아 타이거즈'
@@ -17,7 +18,15 @@ interface ThemeStore {
   setTeam: (team: string) => void;
 }
 
-export const useThemeStore = create<ThemeStore>((set) => ({
-  team: undefined,
-  setTeam: (team) => set({ team }),
-}));
+export const useThemeStore = create(
+  persist<ThemeStore>(
+    (set) => ({
+      team: undefined,
+      setTeam: (team) => set({ team }),
+    }),
+    {
+      name: 'theme-storage',
+      getStorage: () => localStorage,
+    },
+  ),
+);

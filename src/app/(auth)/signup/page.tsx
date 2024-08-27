@@ -23,6 +23,7 @@ import { useThemeStore } from '@/store/theme-store';
 
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import app from '@/lib/firebase.js';
+import Link from 'next/link';
 
 const FormSchema = z
   .object({

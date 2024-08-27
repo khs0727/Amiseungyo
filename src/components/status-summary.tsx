@@ -18,10 +18,12 @@ const userData = {
 
 export default function StatusSummary() {
   const team = useThemeStore((state) => state.team as TeamNames);
+  console.log(team);
 
-  const navClass = TEAMCOLORS[team] || TEAMCOLORS['default'];
+  const teamClass = TEAMCOLORS[team] || TEAMCOLORS['default'];
+
   return (
-    <main className={`max-w-full w-screen ${navClass}`}>
+    <main className={`max-w-full w-screen ${teamClass}`}>
       <div>AmISeungyo?</div>
 
       {/*총 경기수*/}

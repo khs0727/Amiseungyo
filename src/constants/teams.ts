@@ -12,15 +12,15 @@ export const TEAMS = [
 ];
 
 export const TEAMCOLORS: Record<string, string> = {
-  '기아 타이거즈': '#b91c1c',
-  '삼성 라이온즈': '#3b82f6',
-  'LG 트윈스': '#9d174d',
-  '두산 베어스': '#312e81',
-  'SSG 랜더스': '#dc2626',
-  'KT 위즈': '#0a0a0a',
-  '한화 이글스': '#ea580c',
-  '롯데 자이언츠': '#1e3a8a',
-  'NC 다이노스': '#0369a1',
-  '키움 히어로즈': '#be185d',
-  default: '#020617',
+  '기아 타이거즈': 'bg-red-700',
+  '삼성 라이온즈': 'bg-blue-500',
+  'LG 트윈스': 'bg-pink-800',
+  '두산 베어스': 'bg-indigo-900',
+  'SSG 랜더스': 'bg-red-600',
+  'KT 위즈': 'bg-neutral-950',
+  '한화 이글스': 'bg-orange-600',
+  '롯데 자이언츠': 'bg-blue-900',
+  'NC 다이노스': 'bg-sky-700',
+  '키움 히어로즈': 'bg-pink-700',
+  default: 'bg-slate-950',
 };
