@@ -1,9 +1,152 @@
+'use client';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useAuthStore } from '@/store/auth-store';
+import Link from 'next/link';
+
 import ProtectedRoute from '@/components/protected-route';
+import { TeamNames, useThemeStore } from '@/store/theme-store';
+import { TEAMSTYLES } from '@/constants/teams';
+import Nav from '@/components/nav';
+
+const FormSchema = z.object({
+  date: z.string().min(1, { message: '날짜는 필수로 선택해야합니다.' }),
+  team: z.string().min(1, { message: '팀은 필수로 선택해야합니다.' }),
+  score: z.string().min(1, { message: '점수는 필수로 입력해야합니다.' }),
+  player: z.string().optional(),
+  review: z.string().optional(),
+});
+
+type FormValues = z.infer<typeof FormSchema>;
 
 export default function AddGame() {
+  const router = useRouter();
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: { date: '', team: '', score: '', player: '', review: '' },
+  });
+
+  const team = useThemeStore((state) => state.team as TeamNames);
+
+  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+
   return (
     <ProtectedRoute>
-      <div>Hi this is addGame page</div>
+      <Nav />
+      <div
+        className={`flex items-center justify-center max-w-full w-screen h-screen ${teamStyles.bg.light} p-6`}
+      >
+        <div className="flex flex-col items-start w-full max-w-[700px]">
+          <h2 className={`text-3xl underline mb-8 ${teamStyles.text}`}>경기 추가하기</h2>
+          <Form {...form}>
+            <form className="space-y-8 w-full">
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={`text-xl ${teamStyles.text}`}>날짜</FormLabel>
+                    <FormControl>
+                      <Input placeholder="날짜를 선택해주세요." className="text-lg" {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="team"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={`text-xl ${teamStyles.text}`}>상대 팀</FormLabel>
+                    <FormControl>
+                      <Input placeholder="상대팀을 선택해주세요." className="text-lg" {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="score"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={`text-xl ${teamStyles.text}`}>점수</FormLabel>
+                    <FormControl>
+                      <Input placeholder="점수를 입력해주세요" className="text-lg" {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="player"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={`text-xl ${teamStyles.text}`}>수훈 선수</FormLabel>
+                    <FormControl>
+                      <Input placeholder="승리투수를 입력해주세요" className="text-lg" {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="review"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={`text-xl ${teamStyles.text}`}>리뷰</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="주요 경기 내용을 기록해주세요"
+                        className={`text-lg ${teamStyles.text}`}
+                        {...field}
+                      />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                size="lg"
+                type="submit"
+                className={`w-full text-lg ${teamStyles.bg.dark}`}
+                disabled={form.formState.isSubmitting}
+              >
+                추가하기
+              </Button>
+            </form>
+          </Form>
+        </div>
+      </div>
     </ProtectedRoute>
   );
 }
