@@ -1,15 +1,15 @@
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
-import { TEAMCOLORS } from '@/constants/teams';
+import { TEAMSTYLES } from '@/constants/teams';
 
 export default function Nav() {
   const team = useThemeStore((state) => state.team as TeamNames);
 
-  const teamClass = TEAMCOLORS[team] || TEAMCOLORS['default'];
+  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
 
   return (
-    <nav className={`max-w-full w-screen p-8 flex ${teamClass} justify-between`}>
+    <nav className={`max-w-full w-screen p-8 flex ${teamStyles.bg.dark} justify-between`}>
       <Link href="/">
         <h1 className="text-3xl text-white">AmISeungyo</h1>
       </Link>

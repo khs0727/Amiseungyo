@@ -1,4 +1,4 @@
-import { TEAMCOLORS } from '@/constants/teams';
+import { TEAMSTYLES } from '@/constants/teams';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
 
 //임시 데이터
@@ -18,49 +18,52 @@ const userData = {
 
 export default function StatusSummary() {
   const team = useThemeStore((state) => state.team as TeamNames);
-  console.log(team);
 
-  const teamClass = TEAMCOLORS[team] || TEAMCOLORS['default'];
+  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
 
   return (
-    <main className={`max-w-full w-screen ${teamClass}`}>
-      <div>AmISeungyo?</div>
+    <main
+      className={`flex justify-center items-start max-w-full w-screen h-screen ${teamStyles.bg.light}`}
+    >
+      <div className={`w-[1200px] mt-20 mx-10 p-5 border-4 border-dashed ${teamStyles.border}`}>
+        {/*총 경기수*/}
+        <div className="mb-4">
+          <h3 className="text-3xl text-zinc-600 underline">총 직관 경기 수</h3>
+          <p className="text-xl text-zinc-500">{userData.totalGames}</p>
+        </div>
 
-      {/*총 경기수*/}
-      <div className="mb-4">
-        <h3>총 직관 경기 수</h3>
-        <p>{userData.totalGames}</p>
-      </div>
+        {/*응원하는 팀의 승률*/}
+        <div className="mb-4">
+          <h3 className="text-3xl text-zinc-600 underline">나의 승률</h3>
+          <p className="text-xl text-zinc-500">
+            {(userData.teamWinningPercentage * 100).toFixed(2)}%
+          </p>
+        </div>
 
-      {/*응원하는 팀의 승률*/}
-      <div className="mb-4">
-        <h3>나의 승률</h3>
-        <p>{(userData.teamWinningPercentage * 100).toFixed(2)}%</p>
-      </div>
+        {/*최근 기록한 경기*/}
+        <div className="mb-4">
+          <h3 className="text-3xl text-zinc-600 underline">최근 직관 경기</h3>
+          <ul className="text-xl text-zinc-500">
+            {userData.recentGames.map((game, index) => (
+              <li key={index}>
+                <strong>{game.date}:</strong> {game.teams} - {game.score} (
+                {game.isWin ? 'Win' : 'Lose'})
+              </li>
+            ))}
+          </ul>
+        </div>
 
-      {/*최근 기록한 경기*/}
-      <div className="mb-4">
-        <h3>최근 직관 경기</h3>
-        <ul>
-          {userData.recentGames.map((game, index) => (
-            <li key={index}>
-              <strong>{game.date}:</strong> {game.teams} - {game.score} (
-              {game.isWin ? 'Win' : 'Lose'})
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/*하이라이트 경기*/}
-      <div className="mb-4">
-        <h3>Highlight Moments</h3>
-        <ul>
-          {userData.highlightMoments.map((moment, index) => (
-            <li key={index}>
-              <strong>{moment.date}:</strong> {moment.game} - {moment.moment}
-            </li>
-          ))}
-        </ul>
+        {/*하이라이트 경기*/}
+        <div className="mb-4">
+          <h3 className="text-3xl text-zinc-600 underline">Highlight Moments</h3>
+          <ul className="text-xl text-zinc-500">
+            {userData.highlightMoments.map((moment, index) => (
+              <li key={index}>
+                <strong>{moment.date}:</strong> {moment.game} - {moment.moment}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </main>
   );

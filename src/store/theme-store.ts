@@ -26,7 +26,6 @@ export const useThemeStore = create(
     }),
     {
       name: 'theme-storage',
-      getStorage: () => localStorage,
     },
   ),
 );
