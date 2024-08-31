@@ -2,6 +2,7 @@
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CalendarIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,19 +14,24 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAuthStore } from '@/store/auth-store';
 import Link from 'next/link';
+import { Calendar } from '@/components/ui/calendar';
 
 import ProtectedRoute from '@/components/protected-route';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
 import { TEAMSTYLES } from '@/constants/teams';
 import Nav from '@/components/nav';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 const FormSchema = z.object({
-  date: z.string().min(1, { message: '날짜는 필수로 선택해야합니다.' }),
+  date: z.date({ message: '날짜는 필수로 선택해야합니다.' }),
   team: z.string().min(1, { message: '팀은 필수로 선택해야합니다.' }),
   score: z.string().min(1, { message: '점수는 필수로 입력해야합니다.' }),
   player: z.string().optional(),
@@ -39,7 +45,7 @@ export default function AddGame() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { date: '', team: '', score: '', player: '', review: '' },
+    defaultValues: { team: '', score: '', player: '', review: '' },
   });
 
   const team = useThemeStore((state) => state.team as TeamNames);
@@ -60,11 +66,37 @@ export default function AddGame() {
                 control={form.control}
                 name="date"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className={`text-xl ${teamStyles.text}`}>날짜</FormLabel>
-                    <FormControl>
-                      <Input placeholder="날짜를 선택해주세요." className="text-lg" {...field} />
-                    </FormControl>
+                  <FormItem className="flex flex-col">
+                    <FormLabel className={`text-xl ${teamStyles.text}`}>날짜*</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={'outline'}
+                            className={cn(
+                              'w-[240px] pl-3 text-left font-normal text-lg',
+                              !field.value && 'text-muted-foreground',
+                            )}
+                          >
+                            {field.value ? (
+                              format(field.value, 'PPP', { locale: ko })
+                            ) : (
+                              <span className="text-lg text-slate-400">날짜를 선택해주세요</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
 
                     <FormMessage />
                   </FormItem>
@@ -76,7 +108,7 @@ export default function AddGame() {
                 name="team"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className={`text-xl ${teamStyles.text}`}>상대 팀</FormLabel>
+                    <FormLabel className={`text-xl ${teamStyles.text}`}>상대 팀*</FormLabel>
                     <FormControl>
                       <Input placeholder="상대팀을 선택해주세요." className="text-lg" {...field} />
                     </FormControl>
@@ -91,7 +123,7 @@ export default function AddGame() {
                 name="score"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className={`text-xl ${teamStyles.text}`}>점수</FormLabel>
+                    <FormLabel className={`text-xl ${teamStyles.text}`}>점수*</FormLabel>
                     <FormControl>
                       <Input placeholder="점수를 입력해주세요" className="text-lg" {...field} />
                     </FormControl>
