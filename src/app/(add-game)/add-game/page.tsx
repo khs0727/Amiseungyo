@@ -29,6 +29,7 @@ import Nav from '@/components/nav';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import DropdownList from '@/app/(auth)/signup/_components/dropdown-list';
 
 const FormSchema = z.object({
   date: z.date({ message: '날짜는 필수로 선택해야합니다.' }),
@@ -74,14 +75,16 @@ export default function AddGame() {
                           <Button
                             variant={'outline'}
                             className={cn(
-                              'w-[240px] pl-3 text-left font-normal text-lg',
-                              !field.value && 'text-muted-foreground',
+                              'w-[200px] pl-3 text-left font-normal text-lg',
+                              !field.value && 'text-slate-400',
                             )}
                           >
                             {field.value ? (
                               format(field.value, 'PPP', { locale: ko })
                             ) : (
-                              <span className="text-lg text-slate-400">날짜를 선택해주세요</span>
+                              <span className="text-lg text-slate-400 hover:text-slate-900">
+                                날짜를 선택해주세요
+                              </span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
@@ -109,10 +112,11 @@ export default function AddGame() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className={`text-xl ${teamStyles.text}`}>상대 팀*</FormLabel>
-                    <FormControl>
-                      <Input placeholder="상대팀을 선택해주세요." className="text-lg" {...field} />
-                    </FormControl>
-
+                    <DropdownList
+                      value={field.value}
+                      onChange={(value) => field.onChange(value)}
+                      placeholder="팀을 선택해주세요"
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
