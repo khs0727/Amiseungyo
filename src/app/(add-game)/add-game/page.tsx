@@ -1,6 +1,6 @@
 'use client';
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarIcon } from 'lucide-react';
 
@@ -30,11 +30,15 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import DropdownList from '@/app/(auth)/signup/_components/dropdown-list';
+import { Textarea } from '@/components/ui/textarea';
 
 const FormSchema = z.object({
   date: z.date({ message: '날짜는 필수로 선택해야합니다.' }),
   team: z.string().min(1, { message: '팀은 필수로 선택해야합니다.' }),
-  score: z.string().min(1, { message: '점수는 필수로 입력해야합니다.' }),
+  score: z.object({
+    team1: z.number().min(0, { message: '팀 1의 점수는 필수로 입력해야합니다.' }),
+    team2: z.number().min(0, { message: '팀 2의 점수는 필수로 입력해야합니다.' }),
+  }),
   player: z.string().optional(),
   review: z.string().optional(),
 });
@@ -46,7 +50,13 @@ export default function AddGame() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { team: '', score: '', player: '', review: '' },
+    defaultValues: {
+      date: undefined,
+      team: '',
+      score: { team1: undefined, team2: undefined },
+      player: '',
+      review: '',
+    },
   });
 
   const team = useThemeStore((state) => state.team as TeamNames);
@@ -122,20 +132,31 @@ export default function AddGame() {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="score"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className={`text-xl ${teamStyles.text}`}>점수*</FormLabel>
-                    <FormControl>
-                      <Input placeholder="점수를 입력해주세요" className="text-lg" {...field} />
-                    </FormControl>
+              <FormItem>
+                <FormLabel className={`text-xl ${teamStyles.text}`}>스코어*</FormLabel>
+                <FormControl>
+                  <div className="flex items-center space-x-2">
+                    <Controller
+                      name="score.team1"
+                      control={form.control}
+                      render={({ field }) => (
+                        <Input placeholder="0" className="w-10 text-lg" {...field} />
+                      )}
+                    />
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                    <span className="text-lg">:</span>
+                    <Controller
+                      name="score.team2"
+                      control={form.control}
+                      render={({ field }) => (
+                        <Input placeholder="0" className="w-10 text-lg" {...field} />
+                      )}
+                    />
+                  </div>
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
 
               <FormField
                 control={form.control}
@@ -144,7 +165,11 @@ export default function AddGame() {
                   <FormItem>
                     <FormLabel className={`text-xl ${teamStyles.text}`}>수훈 선수</FormLabel>
                     <FormControl>
-                      <Input placeholder="승리투수를 입력해주세요" className="text-lg" {...field} />
+                      <Input
+                        placeholder="오늘 가장 잘한 선수를 입력해주세요"
+                        className="text-lg"
+                        {...field}
+                      />
                     </FormControl>
 
                     <FormMessage />
@@ -159,7 +184,7 @@ export default function AddGame() {
                   <FormItem>
                     <FormLabel className={`text-xl ${teamStyles.text}`}>리뷰</FormLabel>
                     <FormControl>
-                      <Input
+                      <Textarea
                         placeholder="주요 경기 내용을 기록해주세요"
                         className={`text-lg ${teamStyles.text}`}
                         {...field}
