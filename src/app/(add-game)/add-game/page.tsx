@@ -17,9 +17,6 @@ import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useAuthStore } from '@/store/auth-store';
-import Link from 'next/link';
 import { Calendar } from '@/components/ui/calendar';
 
 import ProtectedRoute from '@/components/protected-route';
@@ -53,7 +50,7 @@ export default function AddGame() {
     defaultValues: {
       date: undefined,
       team: '',
-      score: { team1: undefined, team2: undefined },
+      score: { team1: 0, team2: 0 },
       player: '',
       review: '',
     },
@@ -62,6 +59,16 @@ export default function AddGame() {
   const team = useThemeStore((state) => state.team as TeamNames);
 
   const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+
+  const onSubmit = (values: FormValues) => {
+    try {
+      console.log(values);
+      toast.success('등록이 완료되었습니다.');
+      router.push('/my-games');
+    } catch {
+      toast.error('등록 중 오류가 발생하였습니다. 나중에 다시 시도해주세요.');
+    }
+  };
 
   return (
     <ProtectedRoute>
@@ -72,7 +79,7 @@ export default function AddGame() {
         <div className="flex flex-col items-start w-full max-w-[700px]">
           <h2 className={`text-3xl underline mb-8 ${teamStyles.text}`}>경기 추가하기</h2>
           <Form {...form}>
-            <form className="space-y-8 w-full">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
               <FormField
                 control={form.control}
                 name="date"
@@ -140,7 +147,13 @@ export default function AddGame() {
                       name="score.team1"
                       control={form.control}
                       render={({ field }) => (
-                        <Input placeholder="0" className="w-10 text-lg" {...field} />
+                        <Input
+                          placeholder="0"
+                          className="w-15 text-lg"
+                          {...field}
+                          value={field.value || ''}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                        />
                       )}
                     />
 
@@ -149,7 +162,13 @@ export default function AddGame() {
                       name="score.team2"
                       control={form.control}
                       render={({ field }) => (
-                        <Input placeholder="0" className="w-10 text-lg" {...field} />
+                        <Input
+                          placeholder="0"
+                          className="w-15 text-lg"
+                          {...field}
+                          value={field.value || ''}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                        />
                       )}
                     />
                   </div>
@@ -186,7 +205,7 @@ export default function AddGame() {
                     <FormControl>
                       <Textarea
                         placeholder="주요 경기 내용을 기록해주세요"
-                        className={`text-lg ${teamStyles.text}`}
+                        className="text-lg"
                         {...field}
                       />
                     </FormControl>
