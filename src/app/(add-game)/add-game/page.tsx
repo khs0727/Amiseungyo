@@ -28,6 +28,7 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import DropdownList from '@/app/(auth)/signup/_components/dropdown-list';
 import { Textarea } from '@/components/ui/textarea';
+import { useGameStore } from '@/store/game-store';
 
 const FormSchema = z.object({
   date: z.date({ message: '날짜는 필수로 선택해야합니다.' }),
@@ -44,6 +45,7 @@ type FormValues = z.infer<typeof FormSchema>;
 
 export default function AddGame() {
   const router = useRouter();
+  const { addGame } = useGameStore();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -62,7 +64,10 @@ export default function AddGame() {
 
   const onSubmit = (values: FormValues) => {
     try {
-      console.log(values);
+      const formattedDate = values.date.toISOString();
+
+      addGame({ ...values, date: formattedDate });
+
       toast.success('등록이 완료되었습니다.');
       router.push('/my-games');
     } catch {
