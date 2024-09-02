@@ -21,7 +21,7 @@ import { Calendar } from '@/components/ui/calendar';
 
 import ProtectedRoute from '@/components/protected-route';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
-import { TEAMSTYLES } from '@/constants/teams';
+import { defaultImages, TEAMSTYLES } from '@/constants/teams';
 import Nav from '@/components/nav';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -29,6 +29,7 @@ import { ko } from 'date-fns/locale';
 import DropdownList from '@/app/(auth)/signup/_components/dropdown-list';
 import { Textarea } from '@/components/ui/textarea';
 import { useGameStore } from '@/store/game-store';
+import FileInput from './_components/file-input';
 
 const FormSchema = z.object({
   date: z.date({ message: '날짜는 필수로 선택해야합니다.' }),
@@ -37,6 +38,7 @@ const FormSchema = z.object({
     team1: z.number().min(0, { message: '팀 1의 점수는 필수로 입력해야합니다.' }),
     team2: z.number().min(0, { message: '팀 2의 점수는 필수로 입력해야합니다.' }),
   }),
+  picture: z.instanceof(File).optional(),
   player: z.string().optional(),
   review: z.string().optional(),
 });
@@ -53,6 +55,7 @@ export default function AddGame() {
       date: undefined,
       team: '',
       score: { team1: 0, team2: 0 },
+      picture: undefined,
       player: '',
       review: '',
     },
@@ -65,8 +68,10 @@ export default function AddGame() {
   const onSubmit = (values: FormValues) => {
     try {
       const formattedDate = values.date.toISOString();
-
-      addGame({ ...values, date: formattedDate });
+      addGame({
+        ...values,
+        date: formattedDate,
+      });
 
       toast.success('등록이 완료되었습니다.');
       router.push('/my-games');
@@ -79,7 +84,7 @@ export default function AddGame() {
     <ProtectedRoute>
       <Nav />
       <div
-        className={`flex items-center justify-center max-w-full w-screen h-screen ${teamStyles.bg.light} p-6`}
+        className={`flex items-center justify-center max-w-full w-screen ${teamStyles.bg.light} p-6`}
       >
         <div className="flex flex-col items-start w-full max-w-[700px]">
           <h2 className={`text-3xl underline mb-8 ${teamStyles.text}`}>경기 추가하기</h2>
@@ -154,7 +159,7 @@ export default function AddGame() {
                       render={({ field }) => (
                         <Input
                           placeholder="0"
-                          className="w-15 text-lg"
+                          className="w-12 text-lg"
                           {...field}
                           value={field.value || ''}
                           onChange={(e) => field.onChange(Number(e.target.value))}
@@ -169,7 +174,7 @@ export default function AddGame() {
                       render={({ field }) => (
                         <Input
                           placeholder="0"
-                          className="w-15 text-lg"
+                          className="w-12 text-lg"
                           {...field}
                           value={field.value || ''}
                           onChange={(e) => field.onChange(Number(e.target.value))}
@@ -181,6 +186,16 @@ export default function AddGame() {
 
                 <FormMessage />
               </FormItem>
+
+              <FormField
+                control={form.control}
+                name="picture"
+                render={({ field }) => (
+                  <FormItem>
+                    <FileInput field={field} label="사진" teamStyles={teamStyles} />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}

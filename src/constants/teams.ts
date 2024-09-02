@@ -1,3 +1,5 @@
+import { TeamNames } from '@/store/theme-store';
+
 export const TEAMS = [
   '기아 타이거즈',
   '삼성 라이온즈',
@@ -86,4 +88,17 @@ export const TEAMSTYLES: Record<
     text: 'border-slate-950',
     focus: 'focus-visible:ring-slate-500',
   },
+};
+
+export const defaultImages: Record<TeamNames, string> = {
+  '기아 타이거즈': '/public/images/기아타이거즈.svg',
+  '삼성 라이온즈': '/public/images/삼성라이온즈.svg',
+  'LG 트윈스': '/public/images/lg트윈스.svg',
+  '두산 베어스': '/public/images/두산베어스.svg',
+  'SSG 랜더스': '/public/images/ssg랜더스.svg',
+  'KT 위즈': '/public/images/kt위즈.svg',
+  '한화 이글스': '/public/images/한화이글스.svg',
+  '롯데 자이언츠': '/public/images/롯데자이언츠.svg',
+  'NC 다이노스': '/public/images/nc다이노스.svg',
+  '키움 히어로즈': '/public/images/키움히어로즈.svg',
 };
