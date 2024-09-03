@@ -13,6 +13,7 @@ interface Game {
 interface GameStore {
   games: Game[];
   addGame: (game: Game) => void;
+  resetGames: () => void;
 }
 
 export const useGameStore = create(
@@ -22,6 +23,10 @@ export const useGameStore = create(
       addGame: (game) =>
         set((state) => ({
           games: [...state.games, game],
+        })),
+      resetGames: () =>
+        set(() => ({
+          games: [], // games 상태 초기화
         })),
     }),
     {

@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormControl, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { TeamNames } from '@/store/theme-store';
 
 interface FileInputProps {
   field: {
@@ -9,22 +8,29 @@ interface FileInputProps {
     onChange: (file?: File) => void;
   };
   label: string;
-  placeholder?: string;
   className?: string;
   teamStyles: any;
 }
 
-export default function FileInput({
-  field,
-  label,
-  placeholder = '사진을 선택해주세요',
-  className,
-  teamStyles,
-}: FileInputProps) {
+export default function FileInput({ field, label, className, teamStyles }: FileInputProps) {
   const [preview, setPreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    // 컴포넌트 언마운트 시 미리보기 URL 해제
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
+    // 이전 미리보기 URL이 존재하면 해제
+    if (preview) {
+      URL.revokeObjectURL(preview);
+    }
 
     if (file) {
       const previewUrl = URL.createObjectURL(file);
@@ -44,7 +50,6 @@ export default function FileInput({
           type="file"
           onChange={handleFileChange}
           className={`text-lg text-slate-400 ${className}`}
-          placeholder={placeholder}
         />
       </FormControl>
       {preview && (
