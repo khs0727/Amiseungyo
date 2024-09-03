@@ -5,7 +5,7 @@ interface Game {
   date: string;
   team: string;
   score: { team1: number; team2: number };
-  picture?: File;
+  picture?: string | null;
   player?: string;
   review?: string;
 }

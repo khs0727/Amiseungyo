@@ -38,7 +38,7 @@ const FormSchema = z.object({
     team1: z.number().min(0, { message: '팀 1의 점수는 필수로 입력해야합니다.' }),
     team2: z.number().min(0, { message: '팀 2의 점수는 필수로 입력해야합니다.' }),
   }),
-  picture: z.instanceof(File).optional(),
+  picture: z.string().optional(),
   player: z.string().optional(),
   review: z.string().optional(),
 });
@@ -75,6 +75,7 @@ export default function AddGame() {
 
       toast.success('등록이 완료되었습니다.');
       router.push('/my-games');
+      console.log(values);
     } catch {
       toast.error('등록 중 오류가 발생하였습니다. 나중에 다시 시도해주세요.');
     }

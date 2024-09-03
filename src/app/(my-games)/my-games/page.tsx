@@ -2,16 +2,18 @@
 
 import Nav from '@/components/nav';
 import ProtectedRoute from '@/components/protected-route';
-import { TEAMSTYLES } from '@/constants/teams';
+import { defaultImages, TEAMSTYLES } from '@/constants/teams';
 import { useGameStore } from '@/store/game-store';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
-import { useEffect } from 'react';
+import Image from 'next/image';
 
 export default function MyGames() {
   const team = useThemeStore((state) => state.team as TeamNames);
   const resetGames = useGameStore((state) => state.resetGames);
 
   const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+  const teamImage = defaultImages[team];
+
   const games = useGameStore((state) => state.games);
 
   console.log(games);
@@ -31,6 +33,23 @@ export default function MyGames() {
           <ul>
             {games.map((game, index) => (
               <li key={index}>
+                {game.picture ? (
+                  <Image
+                    src={game.picture}
+                    alt="Game"
+                    width={200}
+                    height={200}
+                    className="mt-2 object-cover rounded-lg"
+                  />
+                ) : (
+                  <Image
+                    src={teamImage}
+                    alt="defaultImage"
+                    width={200}
+                    height={200}
+                    className="mt-2 object-cover rounded-lg"
+                  />
+                )}
                 <h3>vs {game.team}</h3>
                 <p>{game.date}</p>
                 <p>
