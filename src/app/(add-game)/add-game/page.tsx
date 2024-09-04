@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -85,7 +86,7 @@ export default function AddGame() {
     <ProtectedRoute>
       <Nav />
       <div
-        className={`flex items-center justify-center max-w-full w-screen ${teamStyles.bg.light} p-6`}
+        className={`flex items-center justify-center max-w-full w-screen ${teamStyles.bg.light} px-6 py-10`}
       >
         <div className="flex flex-col items-start w-full max-w-[700px]">
           <h2 className={`text-3xl underline mb-8 ${teamStyles.text}`}>경기 추가하기</h2>
