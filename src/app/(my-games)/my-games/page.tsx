@@ -34,7 +34,7 @@ export default function MyGames() {
               {games.map((game, index) => (
                 <li
                   key={index}
-                  className="flex mb-3 p-5 shadow-2xl border border-gray-200 rounded-lg transition-colors duration-300 hover:border-zinc-500"
+                  className="flex mb-3 p-5 shadow-2xl border border-gray-200 rounded-lg transition-colors duration-300 hover:border-zinc-500 hover:cursor-pointer"
                 >
                   {game.picture ? (
                     <Image
@@ -42,7 +42,7 @@ export default function MyGames() {
                       alt="Game"
                       width={200}
                       height={200}
-                      className="mt-2 object-contain rounded-lg"
+                      className="mt-2 object-cover rounded-lg"
                     />
                   ) : (
                     <Image
@@ -63,10 +63,18 @@ export default function MyGames() {
                     <p className="text-xl">
                       {game.score.team1} : {game.score.team2}
                     </p>
-                    <p>{new Date(game.date).toISOString().split('T')[0]}</p>
+                    <p className="text-zinc-500">
+                      {new Date(game.date).toISOString().split('T')[0]}
+                    </p>
 
-                    {game.player && <p>수훈선수: {game.player}</p>}
-                    {game.review && <p>리뷰: {game.review}</p>}
+                    {game.player && (
+                      <p className={`${teamStyles.text}`}>수훈선수 : {game.player}</p>
+                    )}
+                    {game.review && (
+                      <span className="text-zinc-500">
+                        리뷰 : <p className="break-keep whitespace-break-spaces">{game.review} </p>
+                      </span>
+                    )}
                   </div>
                 </li>
               ))}
