@@ -21,14 +21,14 @@ export default function MyGames() {
   return (
     <ProtectedRoute>
       <Nav />
-
+      <button onClick={resetGames}>리셋</button>
       <div
-        className={`flex flex-col items-center max-w-full w-screen  h-screen ${teamStyles.bg.light} px-6 py-10`}
+        className={`flex flex-col items-center max-w-full w-screen h-screen ${teamStyles.bg.light} px-6 py-10`}
       >
         <div className="max-w-[1200px] w-full">
-          <h2 className={`text-3xl underline mb-8 ${teamStyles.text}`}>내 경기</h2>
+          <h2 className={`text-3xl underline mb-8 ${teamStyles.text}`}>나의 경기</h2>
           {games.length === 0 ? (
-            <p className="text-3xl">등록한 게임이 없습니다.</p>
+            <p className="text-3xl flex justify-center mt-10">등록된 게임이 없습니다.</p>
           ) : (
             <ul className="grid grid-cols-2 gap-5">
               {games.map((game, index) => (
@@ -53,8 +53,13 @@ export default function MyGames() {
                       className="mt-2 object-contain rounded-lg"
                     />
                   )}
-                  <span className="flex flex-col ml-8 justify-center">
-                    <h3 className="text-2xl">vs {game.team}</h3>
+                  <div className="flex flex-col ml-8 justify-center">
+                    <span className="flex items-center gap-5">
+                      <h3 className="text-2xl">vs {game.team}</h3>
+                      <p className="text-xl" style={{ color: game.scoreResult?.color }}>
+                        {game.scoreResult?.result}
+                      </p>
+                    </span>
                     <p className="text-xl">
                       {game.score.team1} : {game.score.team2}
                     </p>
@@ -62,7 +67,7 @@ export default function MyGames() {
 
                     {game.player && <p>수훈선수: {game.player}</p>}
                     {game.review && <p>리뷰: {game.review}</p>}
-                  </span>
+                  </div>
                 </li>
               ))}
             </ul>

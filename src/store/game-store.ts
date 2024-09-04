@@ -1,3 +1,4 @@
+import { ResultWithColor } from '@/utils/score-calculator';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -5,6 +6,7 @@ interface Game {
   date: string;
   team: string;
   score: { team1: number; team2: number };
+  scoreResult: ResultWithColor | null;
   picture?: string | null;
   player?: string;
   review?: string;

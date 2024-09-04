@@ -31,6 +31,8 @@ import DropdownList from '@/app/(auth)/signup/_components/dropdown-list';
 import { Textarea } from '@/components/ui/textarea';
 import { useGameStore } from '@/store/game-store';
 import FileInput from './_components/file-input';
+import { useEffect, useState } from 'react';
+import ScoreCaculator, { ResultWithColor } from '@/utils/score-calculator';
 
 const FormSchema = z.object({
   date: z.date({ message: '날짜는 필수로 선택해야합니다.' }),
@@ -47,6 +49,8 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>;
 
 export default function AddGame() {
+  const [scoreResult, setScoreResult] = useState<ResultWithColor | null>(null);
+
   const router = useRouter();
   const { addGame } = useGameStore();
 
@@ -62,8 +66,14 @@ export default function AddGame() {
     },
   });
 
-  const team = useThemeStore((state) => state.team as TeamNames);
+  useEffect(() => {
+    const team1Score = form.getValues('score.team1');
+    const team2Score = form.getValues('score.team2');
+    const result = ScoreCaculator({ team1Score, team2Score });
+    setScoreResult(result);
+  }, [form.watch('score.team1'), form.watch('score.team2')]);
 
+  const team = useThemeStore((state) => state.team as TeamNames);
   const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
 
   const onSubmit = (values: FormValues) => {
@@ -71,12 +81,12 @@ export default function AddGame() {
       const formattedDate = values.date.toISOString();
       addGame({
         ...values,
+        scoreResult,
         date: formattedDate,
       });
 
       toast.success('등록이 완료되었습니다.');
       router.push('/my-games');
-      console.log(values);
     } catch {
       toast.error('등록 중 오류가 발생하였습니다. 나중에 다시 시도해주세요.');
     }
@@ -183,8 +193,16 @@ export default function AddGame() {
                         />
                       )}
                     />
+                    {scoreResult && (
+                      <span className="pl-3 text-xl" style={{ color: scoreResult.color }}>
+                        {scoreResult.result}
+                      </span>
+                    )}
                   </div>
                 </FormControl>
+                <FormDescription>
+                  반드시 본인 팀의 스코어를 첫번째 칸에 입력해주세요.
+                </FormDescription>
 
                 <FormMessage />
               </FormItem>
