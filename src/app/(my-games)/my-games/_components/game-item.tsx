@@ -1,3 +1,14 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { TEAMSTYLES } from '@/constants/teams';
 import { Game, useGameStore } from '@/store/game-store';
@@ -67,9 +78,30 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
       {IsMenuOpen && (
         <div className="absolute top-12 right-3 flex flex-col gap-1">
           <Button className={`${teamStyles.bg.dark}`}>수정하기</Button>
-          <Button onClick={() => deleteGame(game.id)} className={`${teamStyles.bg.dark}`}>
-            삭제하기
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button className={`${teamStyles.bg.dark}`}>삭제하기</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className={`${teamStyles.bg.light}`}>
+              <AlertDialogHeader>
+                <AlertDialogTitle>정말 이 게임을 삭제하시겠습니까?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  한 번 삭제한 게임은 다시 되돌릴 수 없습니다.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className={`${teamStyles.bg.dark} text-white`}>
+                  취소
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  className={`${teamStyles.bg.dark}`}
+                  onClick={() => deleteGame(game.id)}
+                >
+                  삭제
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       )}
     </li>
