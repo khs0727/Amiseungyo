@@ -22,11 +22,12 @@ import { Calendar } from '@/components/ui/calendar';
 
 import ProtectedRoute from '@/components/protected-route';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
-import { defaultImages, TEAMSTYLES } from '@/constants/teams';
+import { TEAMSTYLES } from '@/constants/teams';
 import Nav from '@/components/nav';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { v4 as uuidv4 } from 'uuid';
 import DropdownList from '@/app/(auth)/signup/_components/dropdown-list';
 import { Textarea } from '@/components/ui/textarea';
 import { useGameStore } from '@/store/game-store';
@@ -79,8 +80,11 @@ export default function AddGame() {
   const onSubmit = (values: FormValues) => {
     try {
       const formattedDate = values.date.toISOString();
+      const gameId = uuidv4();
+
       addGame({
         ...values,
+        id: gameId,
         scoreResult,
         date: formattedDate,
       });
