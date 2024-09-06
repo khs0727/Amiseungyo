@@ -17,7 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { Calendar } from '@/components/ui/calendar';
 
 import ProtectedRoute from '@/components/protected-route';
@@ -31,9 +31,10 @@ import { v4 as uuidv4 } from 'uuid';
 import DropdownList from '@/app/(auth)/signup/_components/dropdown-list';
 import { Textarea } from '@/components/ui/textarea';
 import { useGameStore } from '@/store/game-store';
-import FileInput from './_components/file-input';
+
 import { useEffect, useState } from 'react';
 import ScoreCaculator, { ResultWithColor } from '@/utils/score-calculator';
+import FileInput from '@/app/(add-game)/add-game/_components/file-input';
 
 const FormSchema = z.object({
   date: z.date({ message: '날짜는 필수로 선택해야합니다.' }),
@@ -49,21 +50,32 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>;
 
-export default function AddGame() {
+export default function EditGame() {
   const [scoreResult, setScoreResult] = useState<ResultWithColor | null>(null);
-
   const router = useRouter();
-  const { addGame } = useGameStore();
+
+  const { games, updateGame } = useGameStore();
+
+  const { id: gameId } = useParams<{ id: string }>();
+
+  const gameToEdit = games.find((game) => game.id === gameId);
+  const utcDate = gameToEdit?.date ? new Date(gameToEdit.date) : new Date();
+  const utcString = utcDate.toISOString().slice(0, 10);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      date: undefined,
-      team: '',
-      score: { team1: 0, team2: 0 },
-      picture: undefined,
-      player: '',
-      review: '',
+      date: new Date(utcString),
+      team: gameToEdit?.team,
+      score: gameToEdit?.team
+        ? {
+            team1: gameToEdit.score?.team1,
+            team2: gameToEdit.score?.team2,
+          }
+        : {},
+      picture: gameToEdit?.picture ?? undefined,
+      player: gameToEdit?.player,
+      review: gameToEdit?.review,
     },
   });
 
@@ -79,15 +91,14 @@ export default function AddGame() {
 
   const onSubmit = (values: FormValues) => {
     try {
-      const gameId = uuidv4();
-
-      addGame({
+      updateGame(gameId, {
         ...values,
         id: gameId,
+        date: new Date(values.date),
         scoreResult,
       });
 
-      toast.success('등록이 완료되었습니다.');
+      toast.success('수정이 완료되었습니다.');
       router.push('/my-games');
     } catch {
       toast.error('등록 중 오류가 발생하였습니다. 나중에 다시 시도해주세요.');
@@ -101,7 +112,7 @@ export default function AddGame() {
         className={`flex items-center justify-center max-w-full w-screen ${teamStyles.bg.light} px-6 py-10`}
       >
         <div className="flex flex-col items-start w-full max-w-[700px]">
-          <h2 className={`text-3xl underline mb-8 ${teamStyles.text}`}>경기 추가하기</h2>
+          <h2 className={`text-3xl underline mb-8 ${teamStyles.text}`}>경기 수정하기</h2>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
               <FormField
@@ -134,7 +145,7 @@ export default function AddGame() {
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                           mode="single"
-                          selected={field.value}
+                          selected={new Date(field.value)}
                           onSelect={field.onChange}
                           disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
                           initialFocus
@@ -263,7 +274,7 @@ export default function AddGame() {
                 className={`w-full text-lg ${teamStyles.bg.dark}`}
                 disabled={form.formState.isSubmitting}
               >
-                추가하기
+                수정하기
               </Button>
             </form>
           </Form>

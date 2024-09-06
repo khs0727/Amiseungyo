@@ -14,6 +14,7 @@ import { TEAMSTYLES } from '@/constants/teams';
 import { Game, useGameStore } from '@/store/game-store';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { HiDotsHorizontal } from 'react-icons/hi';
 
@@ -24,14 +25,20 @@ interface GameItemProps {
 
 export default function GameItem({ game, teamImage }: GameItemProps) {
   const [IsMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   const team = useThemeStore((state) => state.team as TeamNames);
   const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
 
   const deleteGame = useGameStore((state) => state.deleteGame);
+  const gameId = game.id;
 
   const handleIconClick = () => {
     setIsMenuOpen((prev) => !prev);
+  };
+
+  const handleEditClick = () => {
+    router.push(`/edit-game/${gameId}`);
   };
 
   return (
@@ -63,7 +70,7 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
         <p className="text-xl">
           {game.score.team1} : {game.score.team2}
         </p>
-        <p className="text-zinc-500 mb-2">{new Date(game.date).toISOString().split('T')[0]}</p>
+        <p className="text-zinc-500 mb-2">{new Date(game.date).toLocaleDateString('ko-KR')}</p>
 
         {game.player && <p className={`${teamStyles.text} mb-2`}>수훈선수 : {game.player}</p>}
         {game.review && (
@@ -77,7 +84,25 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
       </Button>
       {IsMenuOpen && (
         <div className="absolute top-12 right-3 flex flex-col gap-1">
-          <Button className={`${teamStyles.bg.dark}`}>수정하기</Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button className={`${teamStyles.bg.dark}`}>수정하기</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className={`${teamStyles.bg.light}`}>
+              <AlertDialogHeader>
+                <AlertDialogTitle>이 게임을 수정하시겠습니까?</AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className={`${teamStyles.bg.dark} text-white`}>
+                  취소
+                </AlertDialogCancel>
+                <AlertDialogAction onClick={handleEditClick} className={`${teamStyles.bg.dark}`}>
+                  수정하기
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button className={`${teamStyles.bg.dark}`}>삭제하기</Button>
@@ -97,7 +122,7 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
                   className={`${teamStyles.bg.dark}`}
                   onClick={() => deleteGame(game.id)}
                 >
-                  삭제
+                  삭제하기
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

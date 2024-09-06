@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware';
 
 export interface Game {
   id: string;
-  date: string;
+  date: Date;
   team: string;
   score: { team1: number; team2: number };
   scoreResult: ResultWithColor | null;
@@ -17,7 +17,7 @@ interface GameStore {
   games: Game[];
   addGame: (game: Game) => void;
   deleteGame: (id: string) => void;
-  clearGames: () => void;
+  updateGame: (id: string, updatedGame: Partial<Game>) => void;
 }
 
 export const useGameStore = create(
@@ -33,10 +33,11 @@ export const useGameStore = create(
           games: state.games.filter((game) => game.id != id),
         }));
       },
-      clearGames: () =>
-        set(() => ({
-          games: [], // 모든 게임을 빈 배열로 설정하여 초기화
-        })),
+      updateGame(id: string, updatedGame) {
+        set((state) => ({
+          games: state.games.map((game) => (game.id === id ? { ...game, ...updatedGame } : game)),
+        }));
+      },
     }),
     {
       name: 'game-storage',
