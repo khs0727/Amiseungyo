@@ -12,11 +12,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { TEAMSTYLES } from '@/constants/teams';
 import { Game, useGameStore } from '@/store/game-store';
+import { useHighlightStore } from '@/store/highligt-store';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { HiDotsHorizontal } from 'react-icons/hi';
+import { IoHeartSharp } from 'react-icons/io5';
+import { IoHeartOutline } from 'react-icons/io5';
 
 interface GameItemProps {
   game: Game;
@@ -32,6 +35,16 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
 
   const deleteGame = useGameStore((state) => state.deleteGame);
   const gameId = game.id;
+
+  const { addFavorite, removeFavorite, isFavorite } = useHighlightStore();
+
+  const handleToggleFavorite = () => {
+    if (isFavorite(game.id)) {
+      removeFavorite(game.id);
+    } else {
+      addFavorite(game);
+    }
+  };
 
   const handleIconClick = () => {
     setIsMenuOpen((prev) => !prev);
@@ -79,6 +92,14 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
           </span>
         )}
       </div>
+      <Button variant="icon" className="absolute bottom-3 right-2" onClick={handleToggleFavorite}>
+        {isFavorite(game.id) ? (
+          <IoHeartSharp className="w-6 h-6 text-red-600" />
+        ) : (
+          <IoHeartOutline className="w-6 h-6 text-zinc-400" />
+        )}
+      </Button>
+
       <Button variant="icon" className="absolute top-3 right-3" onClick={handleIconClick}>
         <HiDotsHorizontal />
       </Button>

@@ -11,6 +11,7 @@ import {
 import { Game, useGameStore } from '@/store/game-store';
 import { Card, CardContent } from './ui/card';
 import RecentGames from './recent-games';
+import { useHighlightStore } from '@/store/highligt-store';
 
 //임시 데이터
 const userData = {
@@ -34,6 +35,8 @@ export default function StatusSummary() {
 
   const games = useGameStore((state) => state.games);
 
+  const { favorites } = useHighlightStore();
+
   const calculateWinRate = () => {
     const totalGames = games.length;
     const wins = games.filter((game) => game.scoreResult?.result === '승').length;
@@ -51,7 +54,7 @@ export default function StatusSummary() {
 
   return (
     <main
-      className={`flex justify-center items-start max-w-full w-screen h-screen ${teamStyles.bg.light}`}
+      className={`flex justify-center items-start max-w-full w-screen h-full ${teamStyles.bg.light}`}
     >
       <div className={`w-[1200px] mt-20 mx-10 p-5 border-4 border-dashed ${teamStyles.border}`}>
         {/*총 경기수*/}
@@ -70,7 +73,7 @@ export default function StatusSummary() {
         <div className="mb-6">
           <h3 className="text-3xl text-zinc-600 underline">최근 직관 경기</h3>
 
-          <Carousel className="flex justify-center items-center mt-4 max-w-[1000px] w-full mx-auto">
+          <Carousel className="flex justify-center items-center mt-4 max-w-[1050px] w-full mx-auto">
             {games.length === 0 ? (
               <p className="text-3xl flex justify-center mt-10">등록된 게임이 없습니다.</p>
             ) : (
@@ -94,13 +97,25 @@ export default function StatusSummary() {
         {/*하이라이트 경기*/}
         <div className="mb-4">
           <h3 className="text-3xl text-zinc-600 underline">Highlight Moments</h3>
-          <ul className="text-xl text-zinc-500">
-            {userData.highlightMoments.map((moment, index) => (
-              <li key={index}>
-                <strong>{moment.date}:</strong> {moment.game} - {moment.moment}
-              </li>
-            ))}
-          </ul>
+          <Carousel className="flex justify-center items-center mt-4 max-w-[1050px] w-full mx-auto">
+            {favorites.length === 0 ? (
+              <p className="text-3xl flex justify-center mt-10">등록된 게임이 없습니다.</p>
+            ) : (
+              <CarouselContent>
+                {favorites.map((game, index) => (
+                  <CarouselItem key={index}>
+                    <Card className={`${teamStyles.bg.light} border-zinc-400`}>
+                      <CardContent>
+                        <RecentGames game={game} />
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            )}
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </div>
       </div>
     </main>
