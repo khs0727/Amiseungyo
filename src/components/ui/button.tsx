@@ -26,7 +26,8 @@ const buttonVariants = cva(
         default: 'h-10 pl-3 pr-4 py-2',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
-        auto: 'h-auto w-auto', // icon
+        auto: 'h-auto w-auto',
+        icon: 'h-4 w-4 p-1',
       },
     },
     defaultVariants: {

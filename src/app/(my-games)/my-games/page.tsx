@@ -20,7 +20,7 @@ export default function MyGames() {
       <Nav />
 
       <div
-        className={`flex flex-col items-center max-w-full w-screen h-screen ${teamStyles.bg.light} px-6 py-10`}
+        className={`flex flex-col items-center max-w-full w-screen  ${teamStyles.bg.light} px-6 py-10`}
       >
         <div className="max-w-[1200px] w-full">
           <h2 className={`text-3xl underline mb-8 ${teamStyles.text}`}>나의 경기</h2>
