@@ -13,7 +13,7 @@ export default function RecentGames({ game }: RecentGamesProps) {
   const teamImage = defaultImages[team];
 
   return (
-    <div className="flex p-5">
+    <div className="flex flex-col min-h-[420px] max-h-[500px] mt-5 gap-5 justify-start items-center overflow-y-auto">
       {game.picture ? (
         <Image
           src={game.picture}
@@ -28,10 +28,10 @@ export default function RecentGames({ game }: RecentGamesProps) {
           alt="defaultImage"
           width={200}
           height={200}
-          className="mt-2 object-contain rounded-lg"
+          className="mt-2 object-cover rounded-lg"
         />
       )}
-      <div className="flex flex-col ml-8 justify-center">
+      <div className="flex flex-col mx-4 justify-center">
         <span className="flex items-center gap-5 mb-2">
           <h3 className="text-2xl">vs {game.team}</h3>
           <p className="text-xl" style={{ color: game.scoreResult?.color }}>
