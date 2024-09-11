@@ -92,7 +92,7 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
           </span>
         )}
       </div>
-      <Button variant="icon" className="absolute bottom-3 right-2" onClick={handleToggleFavorite}>
+      <Button variant="icon" className="absolute bottom-2 right-1" onClick={handleToggleFavorite}>
         {isFavorite(game.id) ? (
           <IoHeartSharp className="w-6 h-6 text-red-600" />
         ) : (
