@@ -2,11 +2,23 @@ import Link from 'next/link';
 import { Button } from './ui/button';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
 import { TEAMSTYLES } from '@/constants/teams';
+import { useAuthStore } from '@/store/auth-store';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export default function Nav() {
+  const router = useRouter();
   const team = useThemeStore((state) => state.team as TeamNames);
 
   const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+
+  const { isAuthenticated, logout } = useAuthStore();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+    toast.success('로그아웃 되었습니다.');
+  };
 
   return (
     <nav className={`max-w-full w-screen p-8 flex ${teamStyles.bg.dark} justify-between`}>
@@ -24,11 +36,18 @@ export default function Nav() {
             add Game
           </Button>
         </Link>
-        <Link href="/profile">
-          <Button variant="link" className="text-lg text-white">
-            Profile
+
+        {isAuthenticated ? (
+          <Button variant="link" className="text-lg text-white" onClick={handleLogout}>
+            로그아웃
           </Button>
-        </Link>
+        ) : (
+          <Link href="/signin">
+            <Button variant="link" className="text-lg text-white">
+              로그인
+            </Button>
+          </Link>
+        )}
       </div>
     </nav>
   );
