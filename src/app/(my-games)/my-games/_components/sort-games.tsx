@@ -31,7 +31,10 @@ export default function SortGames({ onSortChange }: SortGamesProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className={`${teamStyles.bg.light} border-2 border-zinc-600`}>
+        <Button
+          variant="outline"
+          className={`${teamStyles.bg.light} border-2 border-zinc-600 text-lg`}
+        >
           {selectedSort}
         </Button>
       </DropdownMenuTrigger>
