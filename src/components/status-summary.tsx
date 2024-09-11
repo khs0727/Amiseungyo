@@ -56,7 +56,9 @@ export default function StatusSummary() {
     <main
       className={`flex justify-center items-start max-w-full w-screen h-full ${teamStyles.bg.light}`}
     >
-      <div className={`mt-16 mx-10 p-5 border-4 border-dashed rounded-lg ${teamStyles.border}`}>
+      <div
+        className={`mt-16 mx-10 px-8 py-5 border-4 border-dashed rounded-lg ${teamStyles.border}`}
+      >
         {/*총 경기수*/}
         <div className="mb-6 flex items-center gap-5">
           <h3 className="text-3xl text-zinc-600 underline">직관 경기 수 :</h3>
@@ -73,9 +75,9 @@ export default function StatusSummary() {
         <div className="mb-6">
           <h3 className="text-3xl text-zinc-600 underline">최근 직관 경기</h3>
 
-          <Carousel className="flex justify-start items-center mt-4 mx-auto">
+          <Carousel className="flex justify-center items-center mt-6 mx-auto">
             {games.length === 0 ? (
-              <p className="text-3xl flex justify-center mt-10">등록된 게임이 없습니다.</p>
+              <p className="text-3xl justify-center flex mt-10">등록된 게임이 없습니다.</p>
             ) : (
               <CarouselContent>
                 {getLatestGames(games, 3).map((game, index) => (
@@ -95,7 +97,7 @@ export default function StatusSummary() {
         {/*하이라이트 경기*/}
         <div className="mb-4">
           <h3 className="text-3xl text-zinc-600 underline">Highlight Moments</h3>
-          <Carousel className="flex max-w-[1030px] w-full justify-start mt-4 mx-auto">
+          <Carousel className="flex max-w-[1030px] w-full justify-center mt-4 mx-auto">
             {favorites.length === 0 ? (
               <p className="text-3xl flex justify-center mt-10">등록된 게임이 없습니다.</p>
             ) : (

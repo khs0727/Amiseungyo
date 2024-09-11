@@ -13,7 +13,7 @@ export default function RecentGames({ game }: RecentGamesProps) {
   const teamImage = defaultImages[team];
 
   return (
-    <div className="flex flex-col min-h-[420px] max-h-[500px] mt-5 gap-5 justify-start items-center overflow-y-auto">
+    <div className="flex flex-col min-h-[450px] max-h-[500px] mt-5 gap-5 justify-start items-center overflow-y-auto">
       {game.picture ? (
         <Image
           src={game.picture}

@@ -1,6 +1,7 @@
 import { ResultWithColor } from '@/utils/score-calculator';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useHighlightStore } from './highligt-store';
 
 export interface Game {
   id: string;
@@ -22,16 +23,20 @@ interface GameStore {
 
 export const useGameStore = create(
   persist<GameStore>(
-    (set) => ({
+    (set, get) => ({
       games: [],
       addGame: (game) =>
         set((state) => ({
           games: [...state.games, game],
         })),
       deleteGame(id: string) {
+        const { removeFavorite } = useHighlightStore.getState();
+
         set((state) => ({
           games: state.games.filter((game) => game.id != id),
         }));
+
+        removeFavorite(id);
       },
       updateGame(id: string, updatedGame) {
         set((state) => ({
