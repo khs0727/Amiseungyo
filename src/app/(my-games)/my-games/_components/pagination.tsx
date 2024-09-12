@@ -39,29 +39,44 @@ export default function GamesPagination({ games }: { games: Game[] }) {
           <PaginationItem>
             <PaginationPrevious
               onClick={() => handlePageChange(currentPage - 1)}
-              aria-disabled={currentPage === 1}
+              disabled={currentPage === 1}
             />
           </PaginationItem>
 
           {[...Array(totalPage)].map((_, index) => {
             const page = index + 1;
-            return (
-              <PaginationItem key={page}>
-                <PaginationLink
-                  isActive={page === currentPage}
-                  onClick={() => handlePageChange(page)}
-                  className="text-lg"
-                >
-                  {page}
-                </PaginationLink>
-              </PaginationItem>
-            );
+            const isStartEllipsis = currentPage > 3 && page === 2;
+            const isEndEllipsis = currentPage < totalPage - 2 && page === totalPage - 1;
+
+            if (page >= currentPage - 1 && page <= currentPage + 1) {
+              return (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    isActive={page === currentPage}
+                    onClick={() => handlePageChange(page)}
+                    className="text-lg"
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              );
+            }
+
+            if (isStartEllipsis) {
+              return <PaginationEllipsis key="start-ellipsis" />;
+            }
+
+            if (isEndEllipsis) {
+              return <PaginationEllipsis key="end-ellipsis" />;
+            }
+
+            return null;
           })}
 
           <PaginationItem>
             <PaginationNext
               onClick={() => handlePageChange(currentPage + 1)}
-              aria-disabled={currentPage === totalPage}
+              disabled={currentPage === totalPage}
             />
           </PaginationItem>
         </PaginationContent>
