@@ -13,21 +13,6 @@ import { Card, CardContent } from './ui/card';
 import RecentGames from './recent-games';
 import { useHighlightStore } from '@/store/highligt-store';
 
-//임시 데이터
-const userData = {
-  totalGames: 25,
-  teamWinningPercentage: 0.68,
-  recentGames: [
-    { date: '2024-08-20', teams: '롯데 vs 한화', score: '3-5', isWin: true },
-    { date: '2024-08-15', teams: '삼성 vs 한화', score: '4-2', isWin: false },
-    { date: '2024-08-10', teams: '한화 vs 두산', score: '3-1', isWin: true },
-  ],
-  highlightMoments: [
-    { game: '두산 vs 한화', moment: '역전승', date: '2024-08-20' },
-    { game: '롯데 vs 한화', moment: 'No-hitter', date: '2024-08-10' },
-  ],
-};
-
 export default function StatusSummary() {
   const team = useThemeStore((state) => state.team as TeamNames);
 
@@ -68,7 +53,7 @@ export default function StatusSummary() {
         {/*응원하는 팀의 승률*/}
         <div className="mb-6 flex items-center gap-5">
           <h3 className="text-3xl text-zinc-600 underline">나의 승률 :</h3>
-          <p className="text-2xl text-zinc-500">{calculateWinRate()}%</p>
+          <p className="text-2xl text-zinc-500 text-shadow">{calculateWinRate()}%</p>
         </div>
 
         {/*최근 기록한 경기*/}

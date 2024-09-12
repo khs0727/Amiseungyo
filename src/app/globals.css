@@ -19,3 +19,11 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.text-shadow {
+  color: #f7fae8;
+  text-shadow:
+    0 0 10px #9da001,
+    0 0 25px #ffee34,
+    0 0 35px #9ce803;
+}
