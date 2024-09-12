@@ -1,0 +1,32 @@
+import { Input } from '@/components/ui/input';
+import { TEAMSTYLES } from '@/constants/teams';
+import { TeamNames, useThemeStore } from '@/store/theme-store';
+import React, { useState } from 'react';
+import { IoIosSearch } from 'react-icons/io';
+
+interface SearchBarProps {
+  searchTerm: string;
+  onSearch: (searchTerm: string) => void;
+}
+
+export default function SearchBar({ searchTerm, onSearch }: SearchBarProps) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    onSearch(value);
+  };
+
+  const team = useThemeStore((state) => state.team as TeamNames);
+  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+
+  return (
+    <div className="flex relative">
+      <IoIosSearch className="absolute top-3 left-2.5 text-zinc-500" />
+      <Input
+        placeholder="검색어를 입력해주세요."
+        value={searchTerm}
+        onChange={handleChange}
+        className={`w-[500px] pl-8 ${teamStyles.bg.light} text-lg border-2 border-zinc-500`}
+      />
+    </div>
+  );
+}
