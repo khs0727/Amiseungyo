@@ -78,7 +78,7 @@ export default function SingupForm() {
   };
 
   return (
-    <div className="flex items-center justify-center w-screen h-screen px-5">
+    <div className="flex items-center justify-center w-screen min-h-screen px-5">
       <div className="flex flex-col items-center w-full max-w-[500px]">
         <Link href="/">
           <h1 className="text-4xl mb-8">AmISeungyo</h1>
@@ -207,6 +207,12 @@ export default function SingupForm() {
             </Button>
           </form>
         </Form>
+        <span className="flex mt-5 gap-3 justify-center">
+          이미 회원이십니까?
+          <Link href="/signin">
+            <p className="text-violet-600 underline decoration-solid cursor-pointer">로그인 하기</p>
+          </Link>
+        </span>
       </div>
     </div>
   );

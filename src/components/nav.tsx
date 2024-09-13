@@ -1,3 +1,14 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
@@ -38,9 +49,26 @@ export default function Nav() {
         </Link>
 
         {isAuthenticated ? (
-          <Button variant="link" className="text-lg text-white" onClick={handleLogout}>
-            로그아웃
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="link" className={`${teamStyles.bg.dark} text-lg text-white`}>
+                로그아웃
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className={`${teamStyles.bg.light}`}>
+              <AlertDialogHeader>
+                <AlertDialogTitle>로그아웃 하시겠습니까?</AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className={`${teamStyles.bg.dark} text-white`}>
+                  취소
+                </AlertDialogCancel>
+                <AlertDialogAction onClick={handleLogout} className={`${teamStyles.bg.dark}`}>
+                  로그아웃
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         ) : (
           <Link href="/signin">
             <Button variant="link" className="text-lg text-white">

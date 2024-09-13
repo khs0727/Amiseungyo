@@ -149,6 +149,14 @@ export default function SigninForm() {
             </Button>
           </form>
         </Form>
+        <span className="flex mt-5 gap-3 justify-center">
+          아직 회원이 아니십니까?
+          <Link href="/signup">
+            <p className="text-violet-600 underline decoration-solid cursor-pointer">
+              회원가입 하기
+            </p>
+          </Link>
+        </span>
       </div>
     </div>
   );
