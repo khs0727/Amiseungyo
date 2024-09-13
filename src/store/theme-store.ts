@@ -15,7 +15,7 @@ export type TeamNames =
 
 interface ThemeStore {
   team: string | undefined;
-  setTeam: (team: string) => void;
+  setTeam: (team: string | undefined) => void;
 }
 
 export const useThemeStore = create(

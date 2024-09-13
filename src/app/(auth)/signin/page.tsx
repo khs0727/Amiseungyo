@@ -60,7 +60,7 @@ export default function SigninForm() {
       const user = userCredential.user;
 
       login({ id: user.uid, email: user.email! });
-      console.log('Zustand State:', useAuthStore.getState());
+      localStorage.setItem('userId', user.uid);
 
       toast.success('로그인에 성공하였습니다.');
       router.push('/');

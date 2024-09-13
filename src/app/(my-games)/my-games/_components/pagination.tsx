@@ -24,7 +24,7 @@ export default function GamesPagination({ games }: { games: Game[] }) {
 
   const currentGames = games.slice((currentPage - 1) * gamesperPage, currentPage * gamesperPage);
 
-  const team = useThemeStore((state) => state.team as TeamNames);
+  const team = useThemeStore((state: { team: string }) => state.team as TeamNames);
   const teamImage = defaultImages[team];
 
   return (

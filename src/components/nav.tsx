@@ -16,17 +16,20 @@ import { TEAMSTYLES } from '@/constants/teams';
 import { useAuthStore } from '@/store/auth-store';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { useGameStore } from '@/store/game-store';
 
 export default function Nav() {
   const router = useRouter();
+  const { isAuthenticated, logout } = useAuthStore();
+
   const team = useThemeStore((state) => state.team as TeamNames);
 
   const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
 
-  const { isAuthenticated, logout } = useAuthStore();
-
   const handleLogout = () => {
     logout();
+    useThemeStore.getState().setTeam(undefined);
+
     router.push('/');
     toast.success('로그아웃 되었습니다.');
   };

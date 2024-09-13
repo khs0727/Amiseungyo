@@ -24,6 +24,8 @@ import { useThemeStore } from '@/store/theme-store';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import app from '@/lib/firebase.js';
 import Link from 'next/link';
+import { v4 as uuidv4 } from 'uuid';
+import { useAuthStore } from '@/store/auth-store';
 
 const FormSchema = z
   .object({
