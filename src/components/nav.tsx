@@ -17,6 +17,7 @@ import { useAuthStore } from '@/store/auth-store';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useGameStore } from '@/store/game-store';
+import axios from 'axios';
 
 export default function Nav() {
   const router = useRouter();
@@ -26,12 +27,17 @@ export default function Nav() {
 
   const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
 
-  const handleLogout = () => {
-    logout();
-    useThemeStore.getState().setTeam(undefined);
+  const handleLogout = async () => {
+    try {
+      await axios.post('/api/logout');
+      logout();
+      useThemeStore.getState().setTeam(undefined);
 
-    router.push('/');
-    toast.success('로그아웃 되었습니다.');
+      router.push('/');
+      toast.success('로그아웃 되었습니다.');
+    } catch (error) {
+      toast.error('로그아웃 중 오류가 발생했습니다. 나중에 다시 시도해주세요.');
+    }
   };
 
   return (

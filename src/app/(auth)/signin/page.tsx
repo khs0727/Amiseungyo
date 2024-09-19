@@ -19,8 +19,9 @@ import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAuthStore } from '@/store/auth-store';
+import axios from 'axios';
 
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import app from '@/lib/firebase.js';
 import Link from 'next/link';
 
@@ -56,11 +57,17 @@ export default function SigninForm() {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
-      const user = userCredential.user;
+      const response = await axios.post('/api/login', {
+        email: values.email,
+        password: values.password,
+      });
 
-      login({ id: user.uid, email: user.email! });
-      localStorage.setItem('userId', user.uid);
+      console.log('API 응답:', response.data);
+
+      const user = response.data;
+
+      login({ id: user.id, email: user.email });
+      localStorage.setItem('userId', user.id);
 
       toast.success('로그인에 성공하였습니다.');
       router.push('/');
