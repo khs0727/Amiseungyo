@@ -62,8 +62,6 @@ export default function SigninForm() {
         password: values.password,
       });
 
-      console.log('API 응답:', response.data);
-
       const user = response.data;
 
       login({ id: user.id, email: user.email });

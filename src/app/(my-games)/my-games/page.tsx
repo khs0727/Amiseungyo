@@ -16,7 +16,6 @@ export default function MyGames() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const team = useThemeStore((state) => state.team as TeamNames);
-
   const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
 
   const games = useGameStore((state) => state.games);

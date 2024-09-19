@@ -26,6 +26,7 @@ import app from '@/lib/firebase.js';
 import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
 import { useAuthStore } from '@/store/auth-store';
+import axios from 'axios';
 
 const FormSchema = z
   .object({
@@ -69,11 +70,19 @@ export default function SingupForm() {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      await createUserWithEmailAndPassword(auth, values.email, values.password);
-      setTeam(values.team);
+      const response = await axios.post('/api/signup', {
+        email: values.email,
+        password: values.password,
+      });
 
-      toast.success('회원가입에 성공하였습니다.');
-      router.push('/signin');
+      const user = response.data;
+
+      if (user.id && user.email) {
+        setTeam(values.team);
+
+        toast.success('회원가입에 성공하였습니다.');
+        router.push('/signin');
+      }
     } catch {
       toast.error('회원가입에 실패하였습니다.');
     }

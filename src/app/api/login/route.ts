@@ -14,6 +14,6 @@ export async function POST(req: NextResponse) {
     return NextResponse.json({ id: user.uid, email: user.email }, { status: 200 });
   } catch (error) {
     console.error('로그인 실패:', error);
-    return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    return NextResponse.json({ error: '로그인 중 오류가 발생하였습니다.' }, { status: 401 });
   }
 }
