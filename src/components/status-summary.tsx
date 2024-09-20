@@ -19,7 +19,8 @@ export default function StatusSummary() {
 
   const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
 
-  const games = useGameStore((state) => state.games);
+  const userId = localStorage.getItem('userId');
+  const games = userId ? useGameStore((state) => state.games[userId] || []) : [];
 
   const { favorites } = useHighlightStore();
 
@@ -44,7 +45,7 @@ export default function StatusSummary() {
         className={`flex justify-center items-start max-w-full w-screen min-h-screen pb-10 ${teamStyles.bg.light}`}
       >
         <div
-          className={`mt-16 mx-10 px-8 py-5 border-4 border-dashed rounded-lg ${teamStyles.border}`}
+          className={`w-[1200px] min-h-[900px] mt-16 mx-10 px-8 py-5 border-4 border-dashed rounded-lg ${teamStyles.border}`}
         >
           {/*총 경기수*/}
           <div className="mb-6 flex items-center gap-5">
@@ -68,7 +69,7 @@ export default function StatusSummary() {
               ) : (
                 <CarouselContent>
                   {getLatestGames(games, 3).map((game, index) => (
-                    <CarouselItem key={index} className="basis-1/3">
+                    <CarouselItem key={index} className="min-w-[330px] basis-1/3">
                       <Card className={`${teamStyles.bg.light} border-zinc-400`}>
                         <CardContent>
                           <RecentGames game={game} />

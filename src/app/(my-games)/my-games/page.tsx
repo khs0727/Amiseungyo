@@ -2,23 +2,33 @@
 
 import Nav from '@/components/nav';
 import ProtectedRoute from '@/components/protected-route';
-import { defaultImages, TEAMSTYLES } from '@/constants/teams';
-import { useGameStore } from '@/store/game-store';
+import { TEAMSTYLES } from '@/constants/teams';
+import { Game, useGameStore } from '@/store/game-store';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
-import GameItem from './_components/game-item';
 import SortGames, { SortType } from './_components/sort-games';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GamesPagination from './_components/pagination';
 import SearchBar from './_components/seacch-bar';
 
 export default function MyGames() {
   const [sortType, setSortType] = useState<SortType>('최신순');
   const [searchTerm, setSearchTerm] = useState('');
+  const [userId, setUserId] = useState<string | null>(null);
+  const [games, setGames] = useState<Game[]>([]);
 
   const team = useThemeStore((state) => state.team as TeamNames);
   const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
 
-  const games = useGameStore((state) => state.games);
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    setUserId(storedUserId);
+
+    if (storedUserId) {
+      const userGames = useGameStore.getState().games[storedUserId] || [];
+      setGames(userGames);
+    }
+  }, []);
+
   const filteredGames = games.filter(
     (game) =>
       game.player?.includes(searchTerm) ||
