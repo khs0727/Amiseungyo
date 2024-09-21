@@ -91,11 +91,12 @@ export const TEAMSTYLES: Record<
 };
 
 export const defaultImages: Record<TeamNames, string> = {
+  default: '/images/kbo로고.png',
   '기아 타이거즈': '/images/기아타이거즈.svg',
   '삼성 라이온즈': '/images/삼성라이온즈.svg',
   'LG 트윈스': '/images/lg트윈스.svg',
   '두산 베어스': '/images/두산베어스.svg',
-  'SSG 랜더스': '/images/ssg랜더스.svg',
+  'SSG 랜더스': '/images/ssg랜더스.png',
   'KT 위즈': '/images/kt위즈.svg',
   '한화 이글스': '/images/한화이글스.svg',
   '롯데 자이언츠': '/images/롯데자이언츠.svg',

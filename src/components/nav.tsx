@@ -25,7 +25,6 @@ export default function Nav() {
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
   const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
-  console.log(team);
   const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
 
   const handleLogout = async () => {

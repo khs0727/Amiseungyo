@@ -13,21 +13,19 @@ import SearchBar from './_components/seacch-bar';
 export default function MyGames() {
   const [sortType, setSortType] = useState<SortType>('최신순');
   const [searchTerm, setSearchTerm] = useState('');
-  const [userId, setUserId] = useState<string | null>(null);
   const [games, setGames] = useState<Game[]>([]);
 
-  const team = useThemeStore((state) => state.team as TeamNames);
-  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
 
   useEffect(() => {
-    const storedUserId = localStorage.getItem('userId');
-    setUserId(storedUserId);
-
-    if (storedUserId) {
-      const userGames = useGameStore.getState().games[storedUserId] || [];
+    if (userId) {
+      const userGames = useGameStore.getState().games[userId] || [];
       setGames(userGames);
     }
-  }, []);
+  }, [userId]);
 
   const filteredGames = games.filter(
     (game) =>

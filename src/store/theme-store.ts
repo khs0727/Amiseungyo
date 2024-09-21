@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type TeamNames =
+  | 'default'
   | '기아 타이거즈'
   | '삼성 라이온즈'
   | 'LG 트윈스'

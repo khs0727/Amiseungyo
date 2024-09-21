@@ -74,8 +74,10 @@ export default function AddGame() {
     setScoreResult(result);
   }, [form.watch('score.team1'), form.watch('score.team2')]);
 
-  const team = useThemeStore((state) => state.team as TeamNames);
-  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+  const userId = localStorage.getItem('userId');
+  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
 
   const onSubmit = (values: FormValues) => {
     try {

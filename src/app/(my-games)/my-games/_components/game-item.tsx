@@ -30,8 +30,9 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
   const [IsMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
 
-  const team = useThemeStore((state) => state.team as TeamNames);
-  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+  const userId = localStorage.getItem('userId');
+  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
 
   const deleteGame = useGameStore((state) => state.deleteGame);
   const gameId = game.id;

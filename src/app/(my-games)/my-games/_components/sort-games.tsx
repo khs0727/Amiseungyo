@@ -19,9 +19,10 @@ interface SortGamesProps {
 export default function SortGames({ onSortChange }: SortGamesProps) {
   const [selectedSort, setSelectedSort] = useState<SortType>('최신순');
 
-  const team = useThemeStore((state) => state.team as TeamNames);
+  const userId = localStorage.getItem('userId');
+  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
 
-  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
 
   const handleSortChange = (sortType: SortType) => {
     setSelectedSort(sortType);

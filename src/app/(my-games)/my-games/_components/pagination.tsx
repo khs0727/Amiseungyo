@@ -24,8 +24,10 @@ export default function GamesPagination({ games }: { games: Game[] }) {
 
   const currentGames = games.slice((currentPage - 1) * gamesperPage, currentPage * gamesperPage);
 
-  const team = useThemeStore((state) => state.team as TeamNames);
-  const teamImage = defaultImages[team];
+  const userId = localStorage.getItem('userId');
+  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+
+  const teamImage = team ? defaultImages[team as TeamNames] : defaultImages['default'];
 
   return (
     <div className="relative min-h-screen">
