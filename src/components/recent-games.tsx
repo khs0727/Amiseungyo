@@ -8,9 +8,11 @@ interface RecentGamesProps {
 }
 
 export default function RecentGames({ game }: RecentGamesProps) {
-  const team = useThemeStore((state) => state.team as TeamNames);
-  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
-  const teamImage = defaultImages[team];
+  const userId = localStorage.getItem('userId');
+  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
+  const teamImage = team ? defaultImages[team] : null;
 
   return (
     <div className="flex flex-col min-h-[450px] max-h-[500px] mt-5 gap-5 justify-start items-center overflow-y-auto">

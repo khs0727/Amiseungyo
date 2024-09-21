@@ -44,7 +44,6 @@ export default function SigninForm() {
   const login = useAuthStore((state) => state.login);
 
   const router = useRouter();
-  const auth = getAuth(app);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),

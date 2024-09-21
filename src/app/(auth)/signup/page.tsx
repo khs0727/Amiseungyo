@@ -20,12 +20,7 @@ import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useThemeStore } from '@/store/theme-store';
-
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
-import app from '@/lib/firebase.js';
 import Link from 'next/link';
-import { v4 as uuidv4 } from 'uuid';
-import { useAuthStore } from '@/store/auth-store';
 import axios from 'axios';
 
 const FormSchema = z
@@ -55,7 +50,6 @@ export default function SingupForm() {
   const { setTeam } = useThemeStore();
 
   const router = useRouter();
-  const auth = getAuth(app);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -78,6 +72,7 @@ export default function SingupForm() {
       const user = response.data;
 
       if (user.id && user.email) {
+        localStorage.setItem('userId', user.id);
         setTeam(values.team);
 
         toast.success('회원가입에 성공하였습니다.');

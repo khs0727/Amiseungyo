@@ -30,7 +30,7 @@ import { ko } from 'date-fns/locale';
 import { v4 as uuidv4 } from 'uuid';
 import DropdownList from '@/app/(auth)/signup/_components/dropdown-list';
 import { Textarea } from '@/components/ui/textarea';
-import { useGameStore } from '@/store/game-store';
+import { Game, useGameStore } from '@/store/game-store';
 
 import { useEffect, useState } from 'react';
 import ScoreCaculator, { ResultWithColor } from '@/utils/score-calculator';
@@ -52,11 +52,23 @@ type FormValues = z.infer<typeof FormSchema>;
 
 export default function EditGame() {
   const [scoreResult, setScoreResult] = useState<ResultWithColor | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [games, setGames] = useState<Game[]>([]);
   const router = useRouter();
 
-  const { games, updateGame } = useGameStore();
+  const { updateGame } = useGameStore();
 
   const { id: gameId } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    setUserId(storedUserId);
+
+    if (storedUserId) {
+      const userGames = useGameStore.getState().games[storedUserId] || [];
+      setGames(userGames);
+    }
+  }, []);
 
   const gameToEdit = games.find((game) => game.id === gameId);
   const utcDate = gameToEdit?.date ? new Date(gameToEdit.date) : new Date();

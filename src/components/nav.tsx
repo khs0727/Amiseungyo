@@ -11,26 +11,28 @@ import {
 
 import Link from 'next/link';
 import { Button } from './ui/button';
-import { TeamNames, useThemeStore } from '@/store/theme-store';
+import { useThemeStore } from '@/store/theme-store';
 import { TEAMSTYLES } from '@/constants/teams';
 import { useAuthStore } from '@/store/auth-store';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { useGameStore } from '@/store/game-store';
 import axios from 'axios';
 
 export default function Nav() {
   const router = useRouter();
   const { isAuthenticated, logout } = useAuthStore();
 
-  const team = useThemeStore((state) => state.team as TeamNames);
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
-  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+  console.log(team);
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
 
   const handleLogout = async () => {
     try {
       await axios.post('/api/logout');
       logout();
+      localStorage.removeItem('userId');
       useThemeStore.getState().setTeam(undefined);
 
       router.push('/');

@@ -14,15 +14,25 @@ export type TeamNames =
   | '키움 히어로즈';
 
 interface ThemeStore {
-  team: string | undefined;
+  team: { [userId: string]: string | undefined };
   setTeam: (team: string | undefined) => void;
 }
 
 export const useThemeStore = create(
   persist<ThemeStore>(
     (set) => ({
-      team: undefined,
-      setTeam: (team) => set({ team }),
+      team: {},
+      setTeam: (team) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+
+        set((state) => ({
+          team: {
+            ...state.team,
+            [userId]: team,
+          },
+        }));
+      },
     }),
     {
       name: 'theme-storage',

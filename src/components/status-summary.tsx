@@ -15,14 +15,13 @@ import { useHighlightStore } from '@/store/highligt-store';
 import Footer from './footer';
 
 export default function StatusSummary() {
-  const team = useThemeStore((state) => state.team as TeamNames);
-
-  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
-
   const userId = localStorage.getItem('userId');
-  const games = userId ? useGameStore((state) => state.games[userId] || []) : [];
+  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
 
-  const { favorites } = useHighlightStore();
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
+
+  const games = userId ? useGameStore((state) => state.games[userId] || []) : [];
+  const favorites = userId ? useHighlightStore((state) => state.favorites[userId] || []) : [];
 
   const calculateWinRate = () => {
     const totalGames = games.length;

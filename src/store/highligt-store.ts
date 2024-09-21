@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import { Game } from './game-store';
 
 interface HighlightStore {
-  favorites: Game[];
+  favorites: { [userId: string]: Game[] };
   addFavorite: (game: Game) => void;
   removeFavorite: (id: string) => void;
   isFavorite: (id: string) => boolean;
@@ -12,16 +12,34 @@ interface HighlightStore {
 export const useHighlightStore = create(
   persist<HighlightStore>(
     (set, get) => ({
-      favorites: [],
-      addFavorite: (game) =>
+      favorites: {},
+      addFavorite: (game) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+
         set((state) => ({
-          favorites: [...state.favorites, game],
-        })),
-      removeFavorite: (id) =>
+          favorites: {
+            ...state.favorites,
+            [userId]: [...(state.favorites[userId] || []), game],
+          },
+        }));
+      },
+      removeFavorite: (id) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+
         set((state) => ({
-          favorites: state.favorites.filter((game) => game.id !== id),
-        })),
-      isFavorite: (id) => get().favorites.some((game) => game.id === id),
+          favorites: {
+            ...state.favorites,
+            [userId]: state.favorites[userId]?.filter((game) => game.id !== id) || [],
+          },
+        }));
+      },
+      isFavorite: (id) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return false;
+        return get().favorites[userId]?.some((game) => game.id === id) || false;
+      },
     }),
     {
       name: 'highlight-store',
