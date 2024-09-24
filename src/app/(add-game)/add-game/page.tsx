@@ -30,11 +30,12 @@ import Nav from '@/components/nav';
 import ProtectedRoute from '@/components/protected-route';
 import { Textarea } from '@/components/ui/textarea';
 import { TEAMSTYLES } from '@/constants/teams';
-import { cn } from '@/lib/utils';
+
 import { useGameStore } from '@/store/game-store';
 import { useThemeStore } from '@/store/theme-store';
 import ScoreCaculator, { ResultWithColor } from '@/utils/score-calculator';
 import FileInput from './_components/file-input';
+import cn from '@/lib/utils';
 
 const FormSchema = z.object({
   date: z.date({ message: '날짜는 필수로 선택해야합니다.' }),

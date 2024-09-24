@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { TEAMS } from '@/constants/teams';
-import { cn } from '@/lib/utils';
+import cn from '@/lib/utils';
 
 interface DropdownListProps {
   value: string;
