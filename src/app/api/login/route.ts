@@ -1,10 +1,10 @@
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import app from '@/lib/firebase';
 
 const auth = getAuth(app);
 
-export default async function POST(req: NextResponse) {
+export default async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
 
