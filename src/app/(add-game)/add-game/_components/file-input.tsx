@@ -1,19 +1,28 @@
+import Image from 'next/image';
 import { useState } from 'react';
 import { FormControl, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { fileToBase64 } from '@/utils/file-to-base64';
+import fileToBase64 from '@/utils/file-to-base64';
 
+interface TeamStyles {
+  bg: {
+    light: string;
+    dark: string;
+  };
+  border: string;
+  text: string;
+  focus: string;
+}
 interface FileInputProps {
   field: {
     value?: string;
     onChange: (file?: string) => void;
   };
   label: string;
-  className?: string;
-  teamStyles: any;
+  teamStyles: TeamStyles;
 }
 
-export default function FileInput({ field, label, className, teamStyles }: FileInputProps) {
+export default function FileInput({ field, label, teamStyles }: FileInputProps) {
   const [preview, setPreview] = useState<string | null>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,14 +47,10 @@ export default function FileInput({ field, label, className, teamStyles }: FileI
     <div>
       <FormLabel className={`text-xl ${teamStyles.text}`}>{label}</FormLabel>
       <FormControl>
-        <Input
-          type="file"
-          onChange={handleFileChange}
-          className={`text-lg text-slate-400 ${className}`}
-        />
+        <Input type="file" onChange={handleFileChange} className="text-lg text-slate-400" />
       </FormControl>
       {preview && (
-        <img src={preview} alt="Preview" className="mt-2 w-40 h-40 rounded-lg object-cover" />
+        <Image src={preview} alt="Preview" className="mt-2 w-40 h-40 rounded-lg object-cover" />
       )}
       <FormMessage />
     </div>

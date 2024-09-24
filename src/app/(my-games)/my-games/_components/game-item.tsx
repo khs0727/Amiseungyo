@@ -1,3 +1,9 @@
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { HiDotsHorizontal } from 'react-icons/hi';
+import { IoHeartSharp, IoHeartOutline } from 'react-icons/io5';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,13 +19,7 @@ import { Button } from '@/components/ui/button';
 import { TEAMSTYLES } from '@/constants/teams';
 import { Game, useGameStore } from '@/store/game-store';
 import { useHighlightStore } from '@/store/highligt-store';
-import { TeamNames, useThemeStore } from '@/store/theme-store';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { HiDotsHorizontal } from 'react-icons/hi';
-import { IoHeartSharp } from 'react-icons/io5';
-import { IoHeartOutline } from 'react-icons/io5';
+import { useThemeStore } from '@/store/theme-store';
 
 interface GameItemProps {
   game: Game;
@@ -31,8 +31,8 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
   const router = useRouter();
 
   const userId = localStorage.getItem('userId');
-  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
-  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
 
   const deleteGame = useGameStore((state) => state.deleteGame);
   const gameId = game.id;
@@ -53,6 +53,11 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
 
   const handleEditClick = () => {
     router.push(`/edit-game/${gameId}`);
+  };
+
+  const handleDeleteClick = () => {
+    deleteGame(gameId);
+    removeFavorite(gameId);
   };
 
   return (
@@ -140,10 +145,7 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
                 <AlertDialogCancel className={`${teamStyles.bg.dark} text-white`}>
                   취소
                 </AlertDialogCancel>
-                <AlertDialogAction
-                  className={`${teamStyles.bg.dark}`}
-                  onClick={() => deleteGame(game.id)}
-                >
+                <AlertDialogAction className={`${teamStyles.bg.dark}`} onClick={handleDeleteClick}>
                   삭제하기
                 </AlertDialogAction>
               </AlertDialogFooter>

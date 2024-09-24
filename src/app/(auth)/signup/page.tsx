@@ -4,8 +4,14 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Button } from '@/components/ui/button';
-import DropdownList from './_components/dropdown-list';
+import { toast } from 'sonner';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import Link from 'next/link';
+import axios from 'axios';
+import { useThemeStore } from '@/store/theme-store';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -14,14 +20,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { toast } from 'sonner';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useThemeStore } from '@/store/theme-store';
-import Link from 'next/link';
-import axios from 'axios';
+import DropdownList from './_components/dropdown-list';
+import { Button } from '@/components/ui/button';
 
 const FormSchema = z
   .object({
@@ -135,10 +135,10 @@ export default function SingupForm() {
                       >
                         <span className="absolute top-1.5 right-4">
                           {showPassword ? (
-                            <AiFillEye color={'#9FA6B2'} size={22} className="hover:fill-[#ddd]" />
+                            <AiFillEye color="#9FA6B2" size={22} className="hover:fill-[#ddd]" />
                           ) : (
                             <AiFillEyeInvisible
-                              color={'#9FA6B2'}
+                              color="#9FA6B2"
                               size={22}
                               className="hover:fill-[#ddd]"
                             />
@@ -177,10 +177,10 @@ export default function SingupForm() {
                       >
                         <span className="absolute top-1.5 right-4">
                           {showPassword ? (
-                            <AiFillEye color={'#9FA6B2'} size={22} className="hover:fill-[#ddd]" />
+                            <AiFillEye color="#9FA6B2" size={22} className="hover:fill-[#ddd]" />
                           ) : (
                             <AiFillEyeInvisible
-                              color={'#9FA6B2'}
+                              color="#9FA6B2"
                               size={22}
                               className="hover:fill-[#ddd]"
                             />

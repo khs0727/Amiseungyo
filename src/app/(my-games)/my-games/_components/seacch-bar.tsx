@@ -1,8 +1,7 @@
+import { IoIosSearch } from 'react-icons/io';
 import { Input } from '@/components/ui/input';
 import { TEAMSTYLES } from '@/constants/teams';
-import { TeamNames, useThemeStore } from '@/store/theme-store';
-import React, { useState } from 'react';
-import { IoIosSearch } from 'react-icons/io';
+import { useThemeStore } from '@/store/theme-store';
 
 interface SearchBarProps {
   searchTerm: string;
@@ -11,14 +10,14 @@ interface SearchBarProps {
 
 export default function SearchBar({ searchTerm, onSearch }: SearchBarProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const { value } = e.target;
     onSearch(value);
   };
 
   const userId = localStorage.getItem('userId');
-  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
-  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
 
   return (
     <div className="flex relative">

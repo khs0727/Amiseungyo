@@ -13,7 +13,7 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuthStore = create(
+const useAuthStore = create(
   persist<AuthState>(
     (set) => ({
       isAuthenticated: false,
@@ -26,3 +26,5 @@ export const useAuthStore = create(
     },
   ),
 );
+
+export default useAuthStore;

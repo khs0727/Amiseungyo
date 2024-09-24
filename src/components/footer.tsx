@@ -1,12 +1,12 @@
-import { TEAMSTYLES } from '@/constants/teams';
-import { TeamNames, useThemeStore } from '@/store/theme-store';
 import { CiBaseball } from 'react-icons/ci';
+import { TEAMSTYLES } from '@/constants/teams';
+import { useThemeStore } from '@/store/theme-store';
 
 export default function Footer() {
   const userId = localStorage.getItem('userId');
-  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
-  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
 
   return (
     <div className={`flex justify-between  ${teamStyles.bg.light} pt-10 pb-5 px-10`}>

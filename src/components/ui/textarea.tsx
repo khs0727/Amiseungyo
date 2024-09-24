@@ -1,16 +1,16 @@
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
 import { TEAMSTYLES } from '@/constants/teams';
+import cn from '@/lib/utils';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, ...props }, ref) => {
-    const team = useThemeStore((state) => state.team as TeamNames);
+    const team = useThemeStore((state) => state.team as unknown as TeamNames);
 
-    const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+    const teamStyles = TEAMSTYLES[team] || TEAMSTYLES.default;
 
     return (
       <textarea

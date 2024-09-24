@@ -1,5 +1,5 @@
 import { TEAMSTYLES } from '@/constants/teams';
-import { TeamNames, useThemeStore } from '@/store/theme-store';
+import { useThemeStore } from '@/store/theme-store';
 
 import {
   Carousel,
@@ -16,12 +16,12 @@ import Footer from './footer';
 
 export default function StatusSummary() {
   const userId = localStorage.getItem('userId');
-  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
-  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
 
-  const games = userId ? useGameStore((state) => state.games[userId] || []) : [];
-  const favorites = userId ? useHighlightStore((state) => state.favorites[userId] || []) : [];
+  const games = useGameStore((state) => (userId ? state.games[userId] || [] : []));
+  const favorites = useHighlightStore((state) => (userId ? state.favorites[userId] || [] : []));
 
   const calculateWinRate = () => {
     const totalGames = games.length;
@@ -30,8 +30,8 @@ export default function StatusSummary() {
     return winRate.toFixed(2);
   };
 
-  const getLatestGames = (games: Game[], count: number) => {
-    const sortedGames = [...games].sort((a, b) => {
+  const getLatestGames = (gameList: Game[], count: number) => {
+    const sortedGames = [...gameList].sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
 
@@ -46,19 +46,19 @@ export default function StatusSummary() {
         <div
           className={`w-[1200px] min-h-[900px] mt-16 mx-10 px-8 py-5 border-4 border-dashed rounded-lg ${teamStyles.border}`}
         >
-          {/*총 경기수*/}
+          {/* 총 경기수 */}
           <div className="mb-6 flex items-center gap-5">
             <h3 className="text-3xl text-zinc-600 underline">직관 경기 수 :</h3>
             <p className="text-2xl text-zinc-500">{games.length}</p>
           </div>
 
-          {/*응원하는 팀의 승률*/}
+          {/* 응원하는 팀의 승률 */}
           <div className="mb-6 flex items-center gap-5">
             <h3 className="text-3xl text-zinc-600 underline">나의 승률 :</h3>
             <p className="text-2xl text-zinc-500 text-shadow">{calculateWinRate()}%</p>
           </div>
 
-          {/*최근 기록한 경기*/}
+          {/* 최근 기록한 경기 */}
           <div className="mb-6">
             <h3 className="text-3xl text-zinc-600 underline">최근 직관 경기</h3>
 
@@ -67,8 +67,8 @@ export default function StatusSummary() {
                 <p className="text-3xl justify-center flex mt-10">등록된 게임이 없습니다.</p>
               ) : (
                 <CarouselContent>
-                  {getLatestGames(games, 3).map((game, index) => (
-                    <CarouselItem key={index} className="min-w-[330px] basis-1/3">
+                  {getLatestGames(games, 3).map((game) => (
+                    <CarouselItem key={game.id} className="min-w-[330px] basis-1/3">
                       <Card className={`${teamStyles.bg.light} border-zinc-400`}>
                         <CardContent>
                           <RecentGames game={game} />
@@ -81,7 +81,7 @@ export default function StatusSummary() {
             </Carousel>
           </div>
 
-          {/*하이라이트 경기*/}
+          {/* 하이라이트 경기 */}
           <div className="mb-4">
             <h3 className="text-3xl text-zinc-600 underline">Highlight Moments</h3>
             <Carousel className="flex max-w-[1030px] w-full justify-center mt-4 mx-auto">
@@ -89,8 +89,8 @@ export default function StatusSummary() {
                 <p className="text-3xl flex justify-center mt-10">등록된 게임이 없습니다.</p>
               ) : (
                 <CarouselContent>
-                  {favorites.map((game, index) => (
-                    <CarouselItem key={index} className="min-w-[330px] basis-1/3">
+                  {favorites.map((game) => (
+                    <CarouselItem key={game.id} className="min-w-[330px] basis-1/3">
                       <Card className={`${teamStyles.bg.light} border-zinc-400`}>
                         <CardContent>
                           <RecentGames game={game} />

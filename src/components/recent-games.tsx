@@ -1,7 +1,7 @@
+import Image from 'next/image';
 import { defaultImages, TEAMSTYLES } from '@/constants/teams';
 import { Game } from '@/store/game-store';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
-import Image from 'next/image';
 
 interface RecentGamesProps {
   game: Game;
@@ -9,10 +9,10 @@ interface RecentGamesProps {
 
 export default function RecentGames({ game }: RecentGamesProps) {
   const userId = localStorage.getItem('userId');
-  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
-  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
-  const teamImage = team ? defaultImages[team as TeamNames] : defaultImages['default'];
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
+  const teamImage = team ? defaultImages[team as TeamNames] : defaultImages.default;
 
   return (
     <div className="flex flex-col min-h-[450px] max-h-[500px] mt-5 gap-5 justify-start items-center overflow-y-auto">

@@ -1,16 +1,16 @@
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
 import { TEAMSTYLES } from '@/constants/teams';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
+import cn from '@/lib/utils';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
-    const team = useThemeStore((state) => state.team as TeamNames);
+    const team = useThemeStore((state) => state.team as unknown as TeamNames);
 
-    const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+    const teamStyles = TEAMSTYLES[team] || TEAMSTYLES.default;
     return (
       <input
         type={type}
