@@ -14,7 +14,7 @@ export default function SearchBar({ searchTerm, onSearch }: SearchBarProps) {
     onSearch(value);
   };
 
-  const userId = localStorage.getItem('userId');
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
   const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
   const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;

@@ -3,7 +3,7 @@ import { TEAMSTYLES } from '@/constants/teams';
 import { useThemeStore } from '@/store/theme-store';
 
 export default function Footer() {
-  const userId = localStorage.getItem('userId');
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
   const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
   const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
