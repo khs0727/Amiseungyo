@@ -4,7 +4,8 @@ import app from '@/lib/firebase';
 
 const auth = getAuth(app);
 
-export default async function POST(req: NextRequest) {
+// eslint-disable-next-line import/prefer-default-export
+export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
 

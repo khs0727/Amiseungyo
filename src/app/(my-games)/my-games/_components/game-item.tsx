@@ -18,7 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { TEAMSTYLES } from '@/constants/teams';
 import { Game, useGameStore } from '@/store/game-store';
-import { useHighlightStore } from '@/store/highligt-store';
+import useHighlightStore from '@/store/highligt-store';
 import { useThemeStore } from '@/store/theme-store';
 
 interface GameItemProps {

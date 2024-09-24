@@ -11,7 +11,7 @@ import {
 import { Game, useGameStore } from '@/store/game-store';
 import { Card, CardContent } from './ui/card';
 import RecentGames from './recent-games';
-import { useHighlightStore } from '@/store/highligt-store';
+import useHighlightStore from '@/store/highligt-store';
 import Footer from './footer';
 
 export default function StatusSummary() {
