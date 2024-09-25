@@ -74,7 +74,7 @@ export default function AddGame() {
     const team2Score = form.getValues('score.team2');
     const result = ScoreCaculator({ team1Score, team2Score });
     setScoreResult(result);
-  }, [form]);
+  }, [form.watch('score.team1'), form.watch('score.team2'), form]);
 
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
   const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));

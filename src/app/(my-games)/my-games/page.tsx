@@ -43,6 +43,13 @@ export default function MyGames() {
     return new Date(a.date).getTime() - new Date(b.date).getTime(); // 오래된순
   });
 
+  const deleteGame = useGameStore((state) => state.deleteGame);
+
+  const handleDeleteGame = (gameId: string) => {
+    deleteGame(gameId);
+    setGames((prevGames) => prevGames.filter((game) => game.id !== gameId));
+  };
+
   return (
     <ProtectedRoute>
       <Nav />
@@ -59,7 +66,7 @@ export default function MyGames() {
           {games.length === 0 ? (
             <p className="text-3xl flex justify-center mt-10">등록된 게임이 없습니다.</p>
           ) : (
-            <GamesPagination games={sortedGames} />
+            <GamesPagination games={sortedGames} onDeleteGame={handleDeleteGame} />
           )}
         </div>
       </div>

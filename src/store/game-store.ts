@@ -18,11 +18,12 @@ interface GameStore {
   addGame: (game: Game) => void;
   deleteGame: (id: string) => void;
   updateGame: (id: string, updatedGame: Partial<Game>) => void;
+  getGame: (id: string) => Game | undefined;
 }
 
 export const useGameStore = create(
   persist<GameStore>(
-    (set) => ({
+    (set, get) => ({
       games: {},
       addGame: (game) => {
         const userId = localStorage.getItem('userId');
@@ -58,6 +59,13 @@ export const useGameStore = create(
             ),
           },
         }));
+      },
+      getGame(id: string) {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return undefined;
+
+        const currentGames = get().games[userId] || [];
+        return currentGames.find((game) => game.id === id);
       },
     }),
     {

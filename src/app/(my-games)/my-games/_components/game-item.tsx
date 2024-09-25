@@ -17,16 +17,17 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { TEAMSTYLES } from '@/constants/teams';
-import { Game, useGameStore } from '@/store/game-store';
+import { Game } from '@/store/game-store';
 import useHighlightStore from '@/store/highligt-store';
 import { useThemeStore } from '@/store/theme-store';
 
 interface GameItemProps {
   game: Game;
   teamImage: string;
+  onDeleteGame: (gameId: string) => void;
 }
 
-export default function GameItem({ game, teamImage }: GameItemProps) {
+export default function GameItem({ game, teamImage, onDeleteGame }: GameItemProps) {
   const [IsMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
 
@@ -34,7 +35,6 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
   const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
   const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
 
-  const deleteGame = useGameStore((state) => state.deleteGame);
   const gameId = game.id;
 
   const { addFavorite, removeFavorite, isFavorite } = useHighlightStore();
@@ -56,7 +56,7 @@ export default function GameItem({ game, teamImage }: GameItemProps) {
   };
 
   const handleDeleteClick = () => {
-    deleteGame(gameId);
+    onDeleteGame(gameId);
     removeFavorite(gameId);
   };
 

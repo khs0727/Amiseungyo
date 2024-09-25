@@ -25,7 +25,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 
 import ProtectedRoute from '@/components/protected-route';
-import { TeamNames, useThemeStore } from '@/store/theme-store';
+import { useThemeStore } from '@/store/theme-store';
 import { TEAMSTYLES } from '@/constants/teams';
 import Nav from '@/components/nav';
 import DropdownList from '@/app/(auth)/signup/_components/dropdown-list';
@@ -52,52 +52,63 @@ type FormValues = z.infer<typeof FormSchema>;
 
 export default function EditGame() {
   const [scoreResult, setScoreResult] = useState<ResultWithColor | null>(null);
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<Game | undefined>(undefined);
   const router = useRouter();
 
-  const { updateGame } = useGameStore();
+  const { updateGame, getGame } = useGameStore();
 
   const { id: gameId } = useParams<{ id: string }>();
 
-  useEffect(() => {
-    const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
-    if (userId) {
-      const userGames = useGameStore.getState().games[userId] || [];
-      setGames(userGames);
-    }
-  }, []);
-
-  const gameToEdit = games.find((game) => game.id === gameId);
-  const utcDate = gameToEdit?.date ? new Date(gameToEdit.date) : new Date();
+  const utcDate = games?.date ? new Date(games.date) : new Date();
   const utcString = utcDate.toISOString().slice(0, 10);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       date: new Date(utcString),
-      team: gameToEdit?.team,
-      score: gameToEdit?.team
+      team: games?.team,
+      score: games?.team
         ? {
-            team1: gameToEdit.score?.team1,
-            team2: gameToEdit.score?.team2,
+            team1: games.score?.team1,
+            team2: games.score?.team2,
           }
         : {},
-      picture: gameToEdit?.picture ?? undefined,
-      player: gameToEdit?.player,
-      review: gameToEdit?.review,
+      picture: games?.picture ?? undefined,
+      player: games?.player,
+      review: games?.review,
     },
   });
+
+  const { reset } = form;
+
+  useEffect(() => {
+    if (userId && gameId) {
+      const game = getGame(gameId);
+      setGames(game);
+      if (game) {
+        reset({
+          date: new Date(game.date),
+          team: game.team,
+          score: game.score,
+          picture: game.picture ?? undefined,
+          player: game.player ?? '',
+          review: game.review ?? '',
+        });
+      }
+    }
+  }, [userId, gameId, getGame, reset]);
 
   useEffect(() => {
     const team1Score = form.getValues('score.team1');
     const team2Score = form.getValues('score.team2');
     const result = ScoreCaculator({ team1Score, team2Score });
     setScoreResult(result);
-  }, [form]);
+  }, [form.watch('score.team1'), form.watch('score.team2'), form]);
 
-  const team = useThemeStore((state) => state.team as unknown as TeamNames);
-  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES.default;
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
 
   const onSubmit = (values: FormValues) => {
     try {

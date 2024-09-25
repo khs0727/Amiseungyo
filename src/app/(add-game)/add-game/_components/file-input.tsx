@@ -50,7 +50,13 @@ export default function FileInput({ field, label, teamStyles }: FileInputProps) 
         <Input type="file" onChange={handleFileChange} className="text-lg text-slate-400" />
       </FormControl>
       {preview && (
-        <Image src={preview} alt="Preview" className="mt-2 w-40 h-40 rounded-lg object-cover" />
+        <Image
+          src={preview}
+          alt="Preview"
+          width={80}
+          height={80}
+          className="mt-2 rounded-lg object-cover"
+        />
       )}
       <FormMessage />
     </div>

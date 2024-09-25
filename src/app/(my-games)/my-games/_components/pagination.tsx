@@ -13,7 +13,12 @@ import { Game } from '@/store/game-store';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
 import GameItem from './game-item';
 
-export default function GamesPagination({ games }: { games: Game[] }) {
+interface GamesPaginationProps {
+  games: Game[];
+  onDeleteGame: (gameId: string) => void;
+}
+
+export default function GamesPagination({ games, onDeleteGame }: GamesPaginationProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const gamesperPage = 6;
   const totalPage = Math.ceil(games.length / gamesperPage);
@@ -33,7 +38,7 @@ export default function GamesPagination({ games }: { games: Game[] }) {
     <div className="relative min-h-screen">
       <ul className="grid grid-cols-2 gap-5 mb-5">
         {currentGames.map((game) => (
-          <GameItem key={game.id} game={game} teamImage={teamImage} />
+          <GameItem key={game.id} game={game} teamImage={teamImage} onDeleteGame={onDeleteGame} />
         ))}
       </ul>
       <Pagination className="fixed bottom-0 left-0 w-full mt-5">
