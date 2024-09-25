@@ -14,9 +14,9 @@ export default function ScoreCaculator({
 }: ScoreCalculatorProps): ResultWithColor {
   if (team1Score > team2Score) {
     return { result: '승', color: 'red' };
-  } else if (team1Score < team2Score) {
-    return { result: '패', color: 'blue' };
-  } else {
-    return { result: '무', color: 'black' };
   }
+  if (team1Score < team2Score) {
+    return { result: '패', color: 'blue' };
+  }
+  return { result: '무', color: 'black' };
 }

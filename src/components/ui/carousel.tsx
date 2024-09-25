@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-shadow */
+
 'use client';
 
 import * as React from 'react';
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import cn from '@/lib/utils';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -101,6 +103,7 @@ const Carousel = React.forwardRef<
     api.on('reInit', onSelect);
     api.on('select', onSelect);
 
+    // eslint-disable-next-line consistent-return
     return () => {
       api?.off('select', onSelect);
     };
@@ -108,9 +111,10 @@ const Carousel = React.forwardRef<
 
   return (
     <CarouselContext.Provider
+      // eslint-disable-next-line react/jsx-no-constructed-context-values
       value={{
         carouselRef,
-        api: api,
+        api,
         opts,
         orientation: orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
         scrollPrev,

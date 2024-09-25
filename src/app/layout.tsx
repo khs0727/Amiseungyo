@@ -18,8 +18,8 @@ export default function RootLayout({
         {/* 폰트 최적화를 위한 preconnect 링크 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-
         {/* Google Fonts 링크 */}
+
         <link
           href="https://fonts.googleapis.com/css2?family=Acme&family=Do+Hyeon&display=swap"
           rel="stylesheet"

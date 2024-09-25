@@ -4,6 +4,12 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { toast } from 'sonner';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import axios from 'axios';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -14,16 +20,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { toast } from 'sonner';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useAuthStore } from '@/store/auth-store';
-import axios from 'axios';
-
-import { getAuth } from 'firebase/auth';
-import app from '@/lib/firebase.js';
-import Link from 'next/link';
+import useAuthStore from '@/store/auth-store';
 
 const FormSchema = z.object({
   email: z.string().email({ message: '유효한 이메일 주소를 입력해주세요.' }),
@@ -125,10 +122,10 @@ export default function SigninForm() {
                       >
                         <span className="absolute top-1.5 right-4">
                           {showPassword ? (
-                            <AiFillEye color={'#9FA6B2'} size={22} className="hover:fill-[#ddd]" />
+                            <AiFillEye color="#9FA6B2" size={22} className="hover:fill-[#ddd]" />
                           ) : (
                             <AiFillEyeInvisible
-                              color={'#9FA6B2'}
+                              color="#9FA6B2"
                               size={22}
                               className="hover:fill-[#ddd]"
                             />

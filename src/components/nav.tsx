@@ -1,3 +1,7 @@
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { toast } from 'sonner';
+import Link from 'next/link';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,14 +13,10 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
-import Link from 'next/link';
 import { Button } from './ui/button';
 import { useThemeStore } from '@/store/theme-store';
 import { TEAMSTYLES } from '@/constants/teams';
-import { useAuthStore } from '@/store/auth-store';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import axios from 'axios';
+import useAuthStore from '@/store/auth-store';
 
 export default function Nav() {
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function Nav() {
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
   const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
-  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
 
   const handleLogout = async () => {
     try {

@@ -1,12 +1,12 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Nav from '@/components/nav';
 import ProtectedRoute from '@/components/protected-route';
 import { TEAMSTYLES } from '@/constants/teams';
 import { Game, useGameStore } from '@/store/game-store';
-import { TeamNames, useThemeStore } from '@/store/theme-store';
+import { useThemeStore } from '@/store/theme-store';
 import SortGames, { SortType } from './_components/sort-games';
-import { useEffect, useState } from 'react';
 import GamesPagination from './_components/pagination';
 import SearchBar from './_components/seacch-bar';
 
@@ -16,9 +16,9 @@ export default function MyGames() {
   const [games, setGames] = useState<Game[]>([]);
 
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
-  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
-  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
 
   useEffect(() => {
     if (userId) {
@@ -38,11 +38,17 @@ export default function MyGames() {
 
   const sortedGames = [...filteredGames].sort((a, b) => {
     if (sortType === '최신순') {
-      return new Date(b.date).getTime() - new Date(a.date).getTime(); //최신순
-    } else {
-      return new Date(a.date).getTime() - new Date(b.date).getTime(); //오래된순
+      return new Date(b.date).getTime() - new Date(a.date).getTime(); // 최신순
     }
+    return new Date(a.date).getTime() - new Date(b.date).getTime(); // 오래된순
   });
+
+  const deleteGame = useGameStore((state) => state.deleteGame);
+
+  const handleDeleteGame = (gameId: string) => {
+    deleteGame(gameId);
+    setGames((prevGames) => prevGames.filter((game) => game.id !== gameId));
+  };
 
   return (
     <ProtectedRoute>
@@ -60,7 +66,7 @@ export default function MyGames() {
           {games.length === 0 ? (
             <p className="text-3xl flex justify-center mt-10">등록된 게임이 없습니다.</p>
           ) : (
-            <GamesPagination games={sortedGames} />
+            <GamesPagination games={sortedGames} onDeleteGame={handleDeleteGame} />
           )}
         </div>
       </div>

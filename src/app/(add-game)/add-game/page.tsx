@@ -1,10 +1,18 @@
 'use client';
-import { z } from 'zod';
-import { Controller, useForm } from 'react-hook-form';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarIcon } from 'lucide-react';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Form,
   FormControl,
@@ -16,24 +24,18 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
-import { Calendar } from '@/components/ui/calendar';
 
-import ProtectedRoute from '@/components/protected-route';
-import { TeamNames, useThemeStore } from '@/store/theme-store';
-import { TEAMSTYLES } from '@/constants/teams';
-import Nav from '@/components/nav';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
-import { v4 as uuidv4 } from 'uuid';
 import DropdownList from '@/app/(auth)/signup/_components/dropdown-list';
+import Nav from '@/components/nav';
+import ProtectedRoute from '@/components/protected-route';
 import { Textarea } from '@/components/ui/textarea';
+import { TEAMSTYLES } from '@/constants/teams';
+
 import { useGameStore } from '@/store/game-store';
-import FileInput from './_components/file-input';
-import { useEffect, useState } from 'react';
+import { useThemeStore } from '@/store/theme-store';
 import ScoreCaculator, { ResultWithColor } from '@/utils/score-calculator';
+import FileInput from './_components/file-input';
+import cn from '@/lib/utils';
 
 const FormSchema = z.object({
   date: z.date({ message: '날짜는 필수로 선택해야합니다.' }),
@@ -72,12 +74,12 @@ export default function AddGame() {
     const team2Score = form.getValues('score.team2');
     const result = ScoreCaculator({ team1Score, team2Score });
     setScoreResult(result);
-  }, [form.watch('score.team1'), form.watch('score.team2')]);
+  }, [form.watch('score.team1'), form.watch('score.team2'), form]);
 
-  const userId = localStorage.getItem('userId');
-  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
-  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
 
   const onSubmit = (values: FormValues) => {
     try {
@@ -116,7 +118,7 @@ export default function AddGame() {
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
-                            variant={'outline'}
+                            variant="outline"
                             className={cn(
                               'w-[200px] pl-3 text-left font-normal text-lg',
                               !field.value && 'text-slate-400',

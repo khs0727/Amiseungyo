@@ -9,7 +9,7 @@ interface HighlightStore {
   isFavorite: (id: string) => boolean;
 }
 
-export const useHighlightStore = create(
+const useHighlightStore = create(
   persist<HighlightStore>(
     (set, get) => ({
       favorites: {},
@@ -46,3 +46,5 @@ export const useHighlightStore = create(
     },
   ),
 );
+
+export default useHighlightStore;

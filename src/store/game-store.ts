@@ -1,7 +1,6 @@
-import { ResultWithColor } from '@/utils/score-calculator';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { useHighlightStore } from './highligt-store';
+import { ResultWithColor } from '@/utils/score-calculator';
 
 export interface Game {
   id: string;
@@ -19,6 +18,7 @@ interface GameStore {
   addGame: (game: Game) => void;
   deleteGame: (id: string) => void;
   updateGame: (id: string, updatedGame: Partial<Game>) => void;
+  getGame: (id: string) => Game | undefined;
 }
 
 export const useGameStore = create(
@@ -39,7 +39,6 @@ export const useGameStore = create(
       deleteGame(id: string) {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
-        const { removeFavorite } = useHighlightStore.getState();
 
         set((state) => ({
           games: {
@@ -47,8 +46,6 @@ export const useGameStore = create(
             [userId]: state.games[userId].filter((game) => game.id !== id),
           },
         }));
-
-        removeFavorite(id);
       },
       updateGame(id: string, updatedGame: Partial<Game>) {
         const userId = localStorage.getItem('userId');
@@ -62,6 +59,13 @@ export const useGameStore = create(
             ),
           },
         }));
+      },
+      getGame(id: string) {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return undefined;
+
+        const currentGames = get().games[userId] || [];
+        return currentGames.find((game) => game.id === id);
       },
     }),
     {

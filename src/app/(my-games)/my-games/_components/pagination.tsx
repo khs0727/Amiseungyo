@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Pagination,
   PaginationContent,
@@ -10,10 +11,14 @@ import {
 import { defaultImages } from '@/constants/teams';
 import { Game } from '@/store/game-store';
 import { TeamNames, useThemeStore } from '@/store/theme-store';
-import { useState } from 'react';
 import GameItem from './game-item';
 
-export default function GamesPagination({ games }: { games: Game[] }) {
+interface GamesPaginationProps {
+  games: Game[];
+  onDeleteGame: (gameId: string) => void;
+}
+
+export default function GamesPagination({ games, onDeleteGame }: GamesPaginationProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const gamesperPage = 6;
   const totalPage = Math.ceil(games.length / gamesperPage);
@@ -24,16 +29,16 @@ export default function GamesPagination({ games }: { games: Game[] }) {
 
   const currentGames = games.slice((currentPage - 1) * gamesperPage, currentPage * gamesperPage);
 
-  const userId = localStorage.getItem('userId');
-  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
-  const teamImage = team ? defaultImages[team as TeamNames] : defaultImages['default'];
+  const teamImage = team ? defaultImages[team as TeamNames] : defaultImages.default;
 
   return (
     <div className="relative min-h-screen">
       <ul className="grid grid-cols-2 gap-5 mb-5">
-        {currentGames.map((game, index) => (
-          <GameItem key={index} game={game} teamImage={teamImage} />
+        {currentGames.map((game) => (
+          <GameItem key={game.id} game={game} teamImage={teamImage} onDeleteGame={onDeleteGame} />
         ))}
       </ul>
       <Pagination className="fixed bottom-0 left-0 w-full mt-5">

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -7,8 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { TEAMSTYLES } from '@/constants/teams';
-import { TeamNames, useThemeStore } from '@/store/theme-store';
-import { useState } from 'react';
+import { useThemeStore } from '@/store/theme-store';
 
 export type SortType = '최신순' | '오래된순';
 
@@ -19,10 +19,10 @@ interface SortGamesProps {
 export default function SortGames({ onSortChange }: SortGamesProps) {
   const [selectedSort, setSelectedSort] = useState<SortType>('최신순');
 
-  const userId = localStorage.getItem('userId');
-  const team = userId ? useThemeStore((state) => state.team[userId]) : undefined;
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
 
-  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES['default'];
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
 
   const handleSortChange = (sortType: SortType) => {
     setSelectedSort(sortType);

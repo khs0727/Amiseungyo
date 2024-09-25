@@ -1,9 +1,15 @@
 'use client';
+
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarIcon } from 'lucide-react';
 
+import { toast } from 'sonner';
+import { useRouter, useParams } from 'next/navigation';
+import { ko } from 'date-fns/locale';
+import { format } from 'date-fns';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -16,25 +22,19 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { toast } from 'sonner';
-import { useRouter, useParams } from 'next/navigation';
 import { Calendar } from '@/components/ui/calendar';
 
 import ProtectedRoute from '@/components/protected-route';
-import { TeamNames, useThemeStore } from '@/store/theme-store';
+import { useThemeStore } from '@/store/theme-store';
 import { TEAMSTYLES } from '@/constants/teams';
 import Nav from '@/components/nav';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
-import { v4 as uuidv4 } from 'uuid';
 import DropdownList from '@/app/(auth)/signup/_components/dropdown-list';
 import { Textarea } from '@/components/ui/textarea';
 import { Game, useGameStore } from '@/store/game-store';
 
-import { useEffect, useState } from 'react';
 import ScoreCaculator, { ResultWithColor } from '@/utils/score-calculator';
 import FileInput from '@/app/(add-game)/add-game/_components/file-input';
+import cn from '@/lib/utils';
 
 const FormSchema = z.object({
   date: z.date({ message: '날짜는 필수로 선택해야합니다.' }),
@@ -52,54 +52,63 @@ type FormValues = z.infer<typeof FormSchema>;
 
 export default function EditGame() {
   const [scoreResult, setScoreResult] = useState<ResultWithColor | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<Game | undefined>(undefined);
   const router = useRouter();
 
-  const { updateGame } = useGameStore();
+  const { updateGame, getGame } = useGameStore();
 
   const { id: gameId } = useParams<{ id: string }>();
 
-  useEffect(() => {
-    const storedUserId = localStorage.getItem('userId');
-    setUserId(storedUserId);
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
-    if (storedUserId) {
-      const userGames = useGameStore.getState().games[storedUserId] || [];
-      setGames(userGames);
-    }
-  }, []);
-
-  const gameToEdit = games.find((game) => game.id === gameId);
-  const utcDate = gameToEdit?.date ? new Date(gameToEdit.date) : new Date();
+  const utcDate = games?.date ? new Date(games.date) : new Date();
   const utcString = utcDate.toISOString().slice(0, 10);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       date: new Date(utcString),
-      team: gameToEdit?.team,
-      score: gameToEdit?.team
+      team: games?.team,
+      score: games?.team
         ? {
-            team1: gameToEdit.score?.team1,
-            team2: gameToEdit.score?.team2,
+            team1: games.score?.team1,
+            team2: games.score?.team2,
           }
         : {},
-      picture: gameToEdit?.picture ?? undefined,
-      player: gameToEdit?.player,
-      review: gameToEdit?.review,
+      picture: games?.picture ?? undefined,
+      player: games?.player,
+      review: games?.review,
     },
   });
+
+  const { reset } = form;
+
+  useEffect(() => {
+    if (userId && gameId) {
+      const game = getGame(gameId);
+      setGames(game);
+      if (game) {
+        reset({
+          date: new Date(game.date),
+          team: game.team,
+          score: game.score,
+          picture: game.picture ?? undefined,
+          player: game.player ?? '',
+          review: game.review ?? '',
+        });
+      }
+    }
+  }, [userId, gameId, getGame, reset]);
 
   useEffect(() => {
     const team1Score = form.getValues('score.team1');
     const team2Score = form.getValues('score.team2');
     const result = ScoreCaculator({ team1Score, team2Score });
     setScoreResult(result);
-  }, [form.watch('score.team1'), form.watch('score.team2')]);
+  }, [form.watch('score.team1'), form.watch('score.team2'), form]);
 
-  const team = useThemeStore((state) => state.team as TeamNames);
-  const teamStyles = TEAMSTYLES[team] || TEAMSTYLES['default'];
+  const team = useThemeStore((state) => (userId ? state.team[userId] : undefined));
+  const teamStyles = team ? TEAMSTYLES[team] : TEAMSTYLES.default;
 
   const onSubmit = (values: FormValues) => {
     try {
@@ -137,7 +146,7 @@ export default function EditGame() {
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
-                            variant={'outline'}
+                            variant="outline"
                             className={cn(
                               'w-[200px] pl-3 text-left font-normal text-lg',
                               !field.value && 'text-slate-400',
